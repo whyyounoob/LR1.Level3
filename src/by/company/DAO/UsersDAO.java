@@ -1,5 +1,7 @@
 package by.company.DAO;
 
-public interface UsersDAO {
+import java.sql.SQLException;
 
+public interface UsersDAO {
+    public void createUser() throws SQLException;
 }

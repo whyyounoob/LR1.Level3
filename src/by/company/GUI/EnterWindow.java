@@ -3,8 +3,8 @@ package by.company.GUI;
 /**
  * This class create GUIForm for EnterWinodow
  * @author Maxim Borodin 650505-1
- * @version 0.0.3
- * @since 21.02.2018
+ * @version 0.0.4
+ * @since 27.02.2018
  */
 
 import javafx.application.Application;
@@ -41,7 +41,7 @@ public class EnterWindow extends Application {
         pane = new Pane();
         username_label = new Label("Username: ");
         password_label = new Label("Password: ");
-        username_field = new TextField("Enter your username...");
+        username_field = new TextField();
         password_field = new PasswordField();
         HomeCatalog = new Label ("Home Catalog");
         loginbtn = new Button("Log In");
@@ -67,10 +67,12 @@ public class EnterWindow extends Application {
         username_field.setPrefSize(200,30);
         username_field.setLayoutX(130);
         username_field.setLayoutY(65);
+        username_field.setPromptText("Enter your username...");
 
         password_field.setPrefSize(200,30);
         password_field.setLayoutX(130);
         password_field.setLayoutY(105);
+        password_field.setPromptText("Enter your password...");
 
         loginbtn.setPrefSize(140,30);
         loginbtn.setLayoutX(40);
@@ -83,6 +85,7 @@ public class EnterWindow extends Application {
             @Override
             public void handle(ActionEvent event) {
                 EnterStage.setScene(new RegistrationWindow(new Pane()));
+
             }
         });
 

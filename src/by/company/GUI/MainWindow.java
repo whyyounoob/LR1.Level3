@@ -1,5 +1,12 @@
 package by.company.GUI;
 
+/**
+ * This class create scene for main window
+ * @author Maxim Borodin 650505-1
+ * @version 0.0.1
+ * @since 27.02.2018
+ */
+
 import by.company.LOGIC.InfoClass;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -37,7 +44,7 @@ public class MainWindow extends Scene {
         MusicButton = new Button("Music");
         DocumentButton = new Button("Document");
         BookButton = new Button("Book");
-        search_field = new TextField("Search...");
+        search_field = new TextField();
         search_btn = new Button("Search");
         add_btn = new Button("Add");
 
@@ -88,6 +95,7 @@ public class MainWindow extends Scene {
                     "-fx-font-size: 18");
         search_field.setLayoutX(280);
         search_field.setLayoutY(0);
+        search_field.setPromptText("What you want?");
 
         search_btn.setLayoutX(530);
         search_btn.setLayoutY(0);

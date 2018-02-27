@@ -3,20 +3,23 @@ package by.company.GUI;
 /**
  * This class create GUIForm for RegistrationWindow
  * @author Maxim Borodin 650505-1
- * @version 0.0.3
- * @since 21.02.2018
+ * @version 0.0.4
+ * @since 27.02.2018
  */
 
+import by.company.DAO.MyUsersDAO;
+import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
+
+import java.sql.SQLException;
 
 public class RegistrationWindow extends Scene {
+
 
     private Label RegLabel;
     private Label userlabel;
@@ -29,16 +32,17 @@ public class RegistrationWindow extends Scene {
     private PasswordField repeatpasswordfield;
     private Button signupbtn;
 
-    public RegistrationWindow(Pane pane) {
 
-        super(pane,300,500);
+    public RegistrationWindow(Pane pane) {
+        super(pane, 300,500);
+
         RegLabel = new Label("Registration");
         userlabel = new Label("Username: ");
         passwordlabel = new Label("Password: ");
         emaillabel = new Label("E-mail: ");
         repeaatpasswordlabel = new Label("Repeat password: ");
-        userfield = new TextField("Enter your username: ");
-        emailfield = new TextField("Enter your e-mail: ");
+        userfield = new TextField();
+        emailfield = new TextField();
         passwordfield = new PasswordField();
         repeatpasswordfield = new PasswordField();
         signupbtn = new Button("SIGN UP");
@@ -59,6 +63,7 @@ public class RegistrationWindow extends Scene {
         userfield.setStyle("-fx-pref-height: 30;" +
                 "-fx-pref-width: 200;" +
                 "-fx-font-size: 14");
+        userfield.setPromptText("Enter your username...");
 
         passwordlabel.setStyle("-fx-font-size: 20");
         passwordlabel.setLayoutX(50);
@@ -69,6 +74,7 @@ public class RegistrationWindow extends Scene {
                 "-fx-font-size: 14");
         passwordfield.setLayoutY(190);
         passwordfield.setLayoutX(50);
+        passwordfield.setPromptText("Enter your password.");
 
         repeaatpasswordlabel.setStyle("-fx-font-size: 20");
         repeaatpasswordlabel.setLayoutX(50);
@@ -79,6 +85,7 @@ public class RegistrationWindow extends Scene {
                 "-fx-font-size: 14");
         repeatpasswordfield.setLayoutY(270);
         repeatpasswordfield.setLayoutX(50);
+        repeatpasswordfield.setPromptText("Repeat your password...");
 
         emaillabel.setStyle("-fx-font-size: 20");
         emaillabel.setLayoutX(50);
@@ -89,6 +96,7 @@ public class RegistrationWindow extends Scene {
                 "-fx-font-size: 14");
         emailfield.setLayoutY(350);
         emailfield.setLayoutX(50);
+        emailfield.setPromptText("Enter your email.");
 
         signupbtn.setStyle("-fx-pref-height: 25;" +
                 "-fx-pref-width: 200;" +
@@ -98,9 +106,28 @@ public class RegistrationWindow extends Scene {
         signupbtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                if(userfield.getText().isEmpty() || emailfield.getText().isEmpty() ||
+                        passwordfield.getText().isEmpty() || repeatpasswordfield.getText().isEmpty()){
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Hmm...");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Fill in all the fields, please!");
+                    alert.showAndWait();
+                }else{
+                    MyUsersDAO mud = new MyUsersDAO(userfield.getText(), emailfield.getText(), passwordfield.getText(),
+                            repeatpasswordfield.getText());
+                    try {
+                        mud.createUser();
 
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         });
+
     }
+
+
 
 }

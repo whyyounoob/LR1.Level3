@@ -7,6 +7,7 @@ package by.company.GUI;
  * @since 27.02.2018
  */
 
+import by.company.DAO.MyUsersDAO;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -18,6 +19,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+
+import java.sql.SQLException;
 
 public class EnterWindow extends Application {
 
@@ -77,6 +80,19 @@ public class EnterWindow extends Application {
         loginbtn.setPrefSize(140,30);
         loginbtn.setLayoutX(40);
         loginbtn.setLayoutY(140);
+        loginbtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                MyUsersDAO mud = new MyUsersDAO(username_field.getText(), password_field.getText());
+                try {
+                    if(mud.loginUser()==1){
+                        EnterStage.setScene(new MainWindow(new Pane(), username_field.getText()));
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
         sign_upbtn.setPrefSize(140,30);
         sign_upbtn.setLayoutX(190);

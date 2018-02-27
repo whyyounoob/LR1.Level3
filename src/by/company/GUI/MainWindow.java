@@ -3,7 +3,7 @@ package by.company.GUI;
 /**
  * This class create scene for main window
  * @author Maxim Borodin 650505-1
- * @version 0.0.1
+ * @version 0.0.2
  * @since 27.02.2018
  */
 
@@ -11,9 +11,14 @@ import by.company.LOGIC.InfoClass;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
+
+import java.io.File;
 
 public class MainWindow extends Scene {
 
@@ -25,19 +30,12 @@ public class MainWindow extends Scene {
     Button search_btn;
     Label username_lbl;
     Button add_btn;
-    TableView <InfoClass> table;
-    TableColumn<InfoClass, String> name_fileCol;
-    TableColumn<InfoClass, String> path_fileCol;
-    TableColumn<InfoClass, Double> size_fileCol;
 
 
     public MainWindow(Pane MainPane, String username) {
         super(MainPane, 610,340);
 
-        table = new TableView<InfoClass>();
-        name_fileCol = new TableColumn<InfoClass, String>("Name File");
-        path_fileCol = new TableColumn<InfoClass, String>("Patn File");
-        size_fileCol = new TableColumn<InfoClass, Double>("Size File");
+
 
         username_lbl = new Label("Welcome, " + username);
         VideoButton = new Button("Video");
@@ -49,17 +47,8 @@ public class MainWindow extends Scene {
         add_btn = new Button("Add");
 
         MainPane.getChildren().addAll(username_lbl, VideoButton, MusicButton, DocumentButton,
-                    BookButton, search_field, search_btn, add_btn, table);
-
-        name_fileCol.setPrefWidth(170);
-        path_fileCol.setPrefWidth(260);
-        size_fileCol.setPrefWidth(60);
-        table.getColumns().addAll(name_fileCol, path_fileCol,size_fileCol);
-        table.setLayoutX(120);
-        table.setLayoutY(40);
-        table.setStyle("-fx-pref-width: 490;" +
-                "-fx-pref-height: 300;");
-
+                    BookButton, search_field, search_btn, add_btn);
+        
         VideoButton.setLayoutX(0);
         VideoButton.setLayoutY(40);
         VideoButton.setStyle("-fx-pref-width: 120;" +
@@ -84,6 +73,12 @@ public class MainWindow extends Scene {
                     "-fx-pref-height: 60");
         add_btn.setLayoutX(0);
         add_btn.setLayoutY(280);
+        add_btn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+            }
+        });
 
         username_lbl.setStyle("-fx-pref-height: 40;" +
                     "-fx-pref-width: 280;" +

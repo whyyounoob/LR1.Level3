@@ -29,6 +29,12 @@ public class MyUsersDAO implements UsersDAO {
         repeat_password = new String(rpw);
 
     }
+
+    public MyUsersDAO(String un,String pw){
+        username = new String(un);
+        password = new String(pw);
+    }
+
     @Override
     public void createUser() throws SQLException {
         Connection connection = new MyDAOFactory().getConnection();
@@ -67,7 +73,22 @@ public class MyUsersDAO implements UsersDAO {
     }
 
     @Override
-    public void loginUser() throws SQLException{
-
+    public int loginUser() throws SQLException{
+        Connection connection = new MyDAOFactory().getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(SQLConstants.LOGIN_USER);
+        preparedStatement.setString(1,username);
+        preparedStatement.setString(2,password);
+        if(preparedStatement.executeQuery().next()){
+            preparedStatement.close();
+            connection.close();
+           return 1;
+        } else{
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Ooops...");
+            alert.setHeaderText(null);
+            alert.setContentText("Something went wrong. Verify that the data entered is correct.");
+            alert.showAndWait();
+        }
+        return 0;
     }
 }

@@ -11,5 +11,5 @@ import java.sql.SQLException;
 
 public interface UsersDAO {
     public void createUser() throws SQLException;
-    public void loginUser() throws SQLException;
+    public int loginUser() throws SQLException;
 }

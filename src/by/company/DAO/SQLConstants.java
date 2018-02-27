@@ -12,4 +12,6 @@ public class SQLConstants {
     public static final String CHECK_EMAIL = new String("SELECT * FROM `users` where `users`.`email` = ?;");
     public static final String INSERT_USER = new String("INSERT INTO users(username, email, password) " +
             "VALUES (?,?,?);");
+    public static final String LOGIN_USER = new String("SELECT id, username FROM users WHERE " +
+            "`users`.`username` = ? AND `users`.`password` = ?;");
 }

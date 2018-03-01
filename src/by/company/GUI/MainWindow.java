@@ -9,6 +9,7 @@ package by.company.GUI;
 
 import by.company.LOGIC.AddItem;
 import by.company.LOGIC.InfoClass;
+import by.company.LOGIC.Item;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -34,11 +35,12 @@ public class MainWindow extends Scene {
     Button search_btn;
     Label username_lbl;
     Button add_btn;
-    TableView table;
-    TableColumn column_name;
-    TableColumn column_date;
+    TableView<Item> table;
+    TableColumn<Item, String> column_name;
+    TableColumn<Item, String> column_date;
     TableColumn column_type;
-    TableColumn column_size;
+    TableColumn<Item, String> column_size;
+
 
     public MainWindow(Pane MainPane, String username) {
         super(MainPane, 610,340);
@@ -53,11 +55,11 @@ public class MainWindow extends Scene {
         search_field = new TextField();
         search_btn = new Button("Search");
         add_btn = new Button("Add");
-        table = new TableView();
-        column_name = new TableColumn("Name");
-        column_date = new TableColumn("Date");
-        column_size = new TableColumn("Size");
-        column_type = new TableColumn("Type");
+        table = new TableView<Item>();
+        column_name = new TableColumn<Item, String>("Name");
+        column_date = new TableColumn<Item, String>("Date");
+        column_size = new TableColumn<Item, String>("Size");
+        column_type = new TableColumn<Item, String>("Type");
 
         table.getColumns().addAll(column_name,column_type, column_date, column_size);
 
@@ -102,7 +104,7 @@ public class MainWindow extends Scene {
             @Override
             public void handle(ActionEvent event) {
                 AddItem addItem = new AddItem();
-                addItem.getFiles();
+                addItem.setList(addItem.getFiles());
             }
         });
 

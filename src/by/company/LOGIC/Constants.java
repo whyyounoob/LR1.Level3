@@ -1,4 +1,4 @@
-package by.company.GUI;
+package by.company.LOGIC;
 
 public class Constants {
 

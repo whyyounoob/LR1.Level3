@@ -7,6 +7,7 @@ package by.company.GUI;
  * @since 27.02.2018
  */
 
+import by.company.LOGIC.AddItem;
 import by.company.LOGIC.InfoClass;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -17,6 +18,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+
+import java.io.File;
+import java.util.List;
 
 //name, date, type, size
 public class MainWindow extends Scene {
@@ -96,7 +101,8 @@ public class MainWindow extends Scene {
         add_btn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-
+                AddItem addItem = new AddItem();
+                addItem.getFiles();
             }
         });
 

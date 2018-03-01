@@ -18,8 +18,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 
-import java.io.File;
-
+//name, date, type, size
 public class MainWindow extends Scene {
 
     Button VideoButton;
@@ -30,7 +29,11 @@ public class MainWindow extends Scene {
     Button search_btn;
     Label username_lbl;
     Button add_btn;
-
+    TableView table;
+    TableColumn column_name;
+    TableColumn column_date;
+    TableColumn column_type;
+    TableColumn column_size;
 
     public MainWindow(Pane MainPane, String username) {
         super(MainPane, 610,340);
@@ -45,10 +48,27 @@ public class MainWindow extends Scene {
         search_field = new TextField();
         search_btn = new Button("Search");
         add_btn = new Button("Add");
+        table = new TableView();
+        column_name = new TableColumn("Name");
+        column_date = new TableColumn("Date");
+        column_size = new TableColumn("Size");
+        column_type = new TableColumn("Type");
+
+        table.getColumns().addAll(column_name,column_type, column_date, column_size);
 
         MainPane.getChildren().addAll(username_lbl, VideoButton, MusicButton, DocumentButton,
-                    BookButton, search_field, search_btn, add_btn);
-        
+                    BookButton, search_field, search_btn, add_btn, table);
+
+        table.setLayoutX(120);
+        table.setLayoutY(40);
+        table.setStyle("-fx-font-size: 15;" +
+                "-fx-pref-width: 490;" +
+                "-fx-pref-height: 300;");
+        column_name.setStyle("-fx-pref-width: 210;");
+        column_type.setStyle("-fx-pref-width: 90;");
+        column_size.setStyle("-fx-pref-width: 90;");
+        column_date.setStyle("-fx-pref-width: 100;");
+
         VideoButton.setLayoutX(0);
         VideoButton.setLayoutY(40);
         VideoButton.setStyle("-fx-pref-width: 120;" +

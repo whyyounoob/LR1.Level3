@@ -10,6 +10,7 @@ package by.company.GUI;
 import by.company.LOGIC.AddItem;
 import by.company.LOGIC.InfoClass;
 import by.company.LOGIC.Item;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,6 +18,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -46,7 +48,6 @@ public class MainWindow extends Scene {
         super(MainPane, 610,340);
 
 
-
         username_lbl = new Label("Welcome, " + username);
         VideoButton = new Button("Video");
         MusicButton = new Button("Music");
@@ -61,7 +62,13 @@ public class MainWindow extends Scene {
         column_size = new TableColumn<Item, String>("Size");
         column_type = new TableColumn<Item, String>("Type");
 
+        column_name.setCellValueFactory(new PropertyValueFactory<>("name"));
+        column_type.setCellValueFactory(new PropertyValueFactory<>("extension"));
+        column_date.setCellValueFactory(new PropertyValueFactory<>("date"));
+        column_size.setCellValueFactory(new PropertyValueFactory<>("size"));
+
         table.getColumns().addAll(column_name,column_type, column_date, column_size);
+
 
         MainPane.getChildren().addAll(username_lbl, VideoButton, MusicButton, DocumentButton,
                     BookButton, search_field, search_btn, add_btn, table);
@@ -103,8 +110,7 @@ public class MainWindow extends Scene {
         add_btn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                AddItem addItem = new AddItem();
-                addItem.setList(addItem.getFiles());
+
             }
         });
 

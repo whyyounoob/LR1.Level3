@@ -41,7 +41,7 @@ public class Item {
     }
 
     private void setExtension(){
-        this.extension.set(path.substring(path.lastIndexOf(".")));
+        this.extension.set(path.substring(path.lastIndexOf(".")+1));
         System.out.println(this.extension);
     }
 
@@ -95,11 +95,19 @@ public class Item {
     }
 
     private void addToDB(){
-            
+
     }
 
     public String getType(){
         return type.getValue();
     }
 
+    public String getName(){ return name.getValue();}
+
+    public String getExtension(){ return extension.getValue(); }
+
+    public String getDate() { return date.getValue(); }
+
+    public String getSize(){ return size.getValue();}
 }
+

@@ -31,7 +31,7 @@ public class AddItem {
     }
 
     public void setList(List<File> list){
-        for(int i = 0;i<list.size();i++){
+        for(int i =0; i<list.size();i++){
             new Item(list.get(i));
         }
     }

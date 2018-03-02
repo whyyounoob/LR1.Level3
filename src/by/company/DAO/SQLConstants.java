@@ -14,4 +14,6 @@ public class SQLConstants {
             "VALUES (?,?,?);");
     public static final String LOGIN_USER = new String("SELECT id, username FROM users WHERE " +
             "`users`.`username` = ? AND `users`.`password` = ?;");
+    public static final String INSERT_INFO = new String("INSERT INTO Information(path_info, date_info, type_info) " +
+            "VALUES (?,?,?);");
 }

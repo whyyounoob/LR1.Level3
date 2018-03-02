@@ -10,6 +10,9 @@ import java.util.List;
 public class AddItem {
     private FileChooser fileChooser;
     private ArrayList<Item> audio_list = new ArrayList<Item>();
+    private ArrayList<Item> video_list = new ArrayList<Item>();
+    private ArrayList<Item> book_list = new ArrayList<Item>();
+    private ArrayList<Item> documents_list = new ArrayList<Item>();
 
     public AddItem(){
         fileChooser = new FileChooser();

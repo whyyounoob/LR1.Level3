@@ -22,7 +22,7 @@ public class MyUsersDAO implements UsersDAO {
     private String password;
     private String repeat_password;
 
-    public MyUsersDAO(String un, String em, String pw, String rpw){
+    public MyUsersDAO(final String un, final String em, final String pw, final String rpw){
         username = new String(un);
         email = new String(em);
         password = new String(pw);
@@ -30,7 +30,7 @@ public class MyUsersDAO implements UsersDAO {
 
     }
 
-    public MyUsersDAO(String un,String pw){
+    public MyUsersDAO(final String un, final String pw){
         username = new String(un);
         password = new String(pw);
     }

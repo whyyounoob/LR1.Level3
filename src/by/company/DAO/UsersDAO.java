@@ -10,6 +10,6 @@ package by.company.DAO;
 import java.sql.SQLException;
 
 public interface UsersDAO {
-    public void createUser() throws SQLException;
-    public int loginUser() throws SQLException;
+    void createUser() throws SQLException;
+    int loginUser() throws SQLException;
 }

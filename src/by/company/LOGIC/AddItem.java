@@ -30,9 +30,12 @@ public class AddItem {
         return list;
     }
 
-    public void setList(List<File> list){
+    public void setList(final List<File> list){
         for(int i =0; i<list.size();i++){
-            new Item(list.get(i));
+            Item item = new Item(list.get(i));
+            switch(item.getType()){
+                
+            }
         }
     }
 }

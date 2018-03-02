@@ -18,7 +18,7 @@ public class InfoClass{
  * Constructor with all parametrs
  */
 
-    public InfoClass(String name, String Path, double Size){
+    public InfoClass(final String name, final String Path, double Size){
         NameFile = name;
         PathFile = Path;
         SizeFile = Size;

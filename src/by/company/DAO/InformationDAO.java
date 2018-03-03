@@ -11,4 +11,5 @@ import java.sql.SQLException;
 
 public interface InformationDAO {
     public void setInfo(final String path, final String date, final String type) throws SQLException;
+    public void getInfo() throws SQLException;
 }

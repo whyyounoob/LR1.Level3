@@ -24,6 +24,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.sql.SQLException;
 import java.util.List;
 
 //name, date, type, size
@@ -42,6 +43,7 @@ public class MainWindow extends Scene {
     TableColumn<Item, String> column_date;
     TableColumn column_type;
     TableColumn<Item, String> column_size;
+    ObservableList<Item> video_list;
 
 
     public MainWindow(Pane MainPane, String username) {
@@ -110,7 +112,11 @@ public class MainWindow extends Scene {
         add_btn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-
+                try {
+                    AddItem addItem = new AddItem();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         });
 

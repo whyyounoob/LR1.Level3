@@ -18,4 +18,5 @@ public class SQLConstants {
     public static final String INSERT_INFO = new String("INSERT INTO Information" +
             "(path_info, date_info, type_info) " +
             "VALUES (?,?,?);");
+    public static final String SELECT_INFO = new String("SELECT * FROM Information;");
 }

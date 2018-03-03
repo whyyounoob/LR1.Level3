@@ -1,8 +1,11 @@
 package by.company.LOGIC;
 
+import by.company.DAO.MyInformationDAO;
 import javafx.beans.property.SimpleStringProperty;
 
+import java.awt.event.ContainerAdapter;
 import java.io.File;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -16,7 +19,7 @@ public class Item {
 
     private File file;
 
-    Item(File file){
+    Item(File file) throws SQLException {
         setFile(file);
         setName();
         setPath();
@@ -24,8 +27,12 @@ public class Item {
         setType();
         setDate();
         setSize();
+        //addToDB();
     }
 
+    Item(){
+
+    }
     private void setFile(File file){
         this.file = file;
     }
@@ -47,27 +54,27 @@ public class Item {
 
     private void setType(){
         switch(this.extension.getValue()){
-            case ".docx":
-            case ".doc":
-            case ".ppt":
-            case ".pptx":
-            case ".xlsx":
-                type.set("DOCUMENTS");
+            case "docx":
+            case "doc":
+            case "ppt":
+            case "pptx":
+            case "xlsx":
+                type.set(Constants.DOCUMENTS);
                 break;
-            case ".pdf":
-                type.set("BOOK");
+            case "pdf":
+                type.set(Constants.BOOK);
                 break;
-            case ".mp3":
-            case ".wav":
-                type.set("AUDIO");
+            case "mp3":
+            case "wav":
+                type.set(Constants.AUDIO);
                 break;
-            case ".mp4":
-            case ".mkv":
-            case ".avi":
-                type.set("VIDEO");
+            case "mp4":
+            case "mkv":
+            case "avi":
+                type.set(Constants.VIDEO);
                 break;
         }
-        System.out.println(type);
+        System.out.println(type.getValue());
     }
 
     private void setDate(){
@@ -94,8 +101,9 @@ public class Item {
         System.out.println(this.size.toString());
     }
 
-    private void addToDB(){
-
+    private void addToDB() throws SQLException {
+        MyInformationDAO myInformationDAO = new MyInformationDAO();
+        myInformationDAO.setInfo(path, date.getValue(), type.getValue());
     }
 
     public String getType(){

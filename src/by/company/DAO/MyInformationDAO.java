@@ -5,9 +5,7 @@ package by.company.DAO;
  * @version 0.0.1
  * @since 27.02.2018
  */
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class MyInformationDAO implements InformationDAO {
     /**
@@ -26,5 +24,14 @@ public class MyInformationDAO implements InformationDAO {
         preparedStatement.setString(3, type);
         preparedStatement.execute();
         connection.close();
+    }
+
+    public void getInfo() throws SQLException {
+        Connection connection = new MyDAOFactory().getConnection();
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery(SQLConstants.SELECT_INFO);
+        while(resultSet.next()){
+
+        }
     }
 }

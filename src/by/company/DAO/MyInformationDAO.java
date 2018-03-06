@@ -5,7 +5,11 @@ package by.company.DAO;
  * @version 0.0.1
  * @since 27.02.2018
  */
+import by.company.LOGIC.AddItem;
+
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MyInformationDAO implements InformationDAO {
     /**
@@ -26,12 +30,16 @@ public class MyInformationDAO implements InformationDAO {
         connection.close();
     }
 
-    public void getInfo() throws SQLException {
+    public List<String> getInfo() throws SQLException {
+        List<String> list = new ArrayList<String>();
         Connection connection = new MyDAOFactory().getConnection();
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(SQLConstants.SELECT_INFO);
         while(resultSet.next()){
 
         }
+        return list;
     }
+
+
 }

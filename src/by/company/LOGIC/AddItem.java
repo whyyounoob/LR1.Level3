@@ -1,5 +1,7 @@
 package by.company.LOGIC;
 
+import by.company.DAO.MyDAOFactory;
+import by.company.DAO.MyInformationDAO;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -25,9 +27,18 @@ public class AddItem {
                 Constants.ALL_EXTENSIONS));
         setList(getFiles());
     }
- 
-    public AddItem(final String path, final String date, final String type){
+    public AddItem(final String path){
+    }
 
+    public List<File> getfromDB(final List<String> list){
+        List<File> fileList = new ArrayList<File>();
+        for(int i=0; i<list.size(); i++){
+            File file = new File(list.get(i));
+            if(file.exists()){
+                fileList.add(file);
+            }
+        }
+        return fileList;
     }
 
     public List<File> getFiles(){

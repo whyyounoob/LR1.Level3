@@ -8,11 +8,7 @@ package by.company.GUI;
  */
 
 import by.company.LOGIC.AddItem;
-import by.company.LOGIC.InfoClass;
 import by.company.LOGIC.Item;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -20,35 +16,32 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 
-import java.io.File;
 import java.sql.SQLException;
-import java.util.List;
 
 //name, date, type, size
 public class MainWindow extends Scene {
 
-    Button VideoButton;
-    Button MusicButton;
-    Button DocumentButton;
-    Button BookButton;
-    TextField search_field;
-    Button search_btn;
-    Label username_lbl;
-    Button add_btn;
-    TableView<Item> table;
-    TableColumn<Item, String> column_name;
-    TableColumn<Item, String> column_date;
-    TableColumn column_type;
-    TableColumn<Item, String> column_size;
-    ObservableList<Item> video_list;
+    private Button VideoButton;
+    private Button MusicButton;
+    private Button DocumentButton;
+    private Button BookButton;
+    private TextField search_field;
+    private Button search_btn;
+    private Label username_lbl;
+    private Button add_btn;
+    private TableView<Item> table;
+    private TableColumn<Item, String> column_name;
+    private TableColumn<Item, String> column_date;
+    private TableColumn column_type;
+    private TableColumn<Item, String> column_size;
+    private ObservableList<Item> video_list;
+    private AddItem addItem;
 
 
-    public MainWindow(Pane MainPane, String username) {
+    public MainWindow(Pane MainPane, String username)
+    {
         super(MainPane, 610,340);
-
 
         username_lbl = new Label("Welcome, " + username);
         VideoButton = new Button("Video");
@@ -63,6 +56,7 @@ public class MainWindow extends Scene {
         column_date = new TableColumn<Item, String>("Date");
         column_size = new TableColumn<Item, String>("Size");
         column_type = new TableColumn<Item, String>("Type");
+
 
         column_name.setCellValueFactory(new PropertyValueFactory<>("name"));
         column_type.setCellValueFactory(new PropertyValueFactory<>("extension"));
@@ -137,4 +131,8 @@ public class MainWindow extends Scene {
         search_btn.setStyle("-fx-pref-height: 40;" +
                     "-fx-pref-width: 80");
     }
+
+
 }
+
+

@@ -1,6 +1,7 @@
 package by.company.DAO;
 
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * It`s interface for Information DAO Class
@@ -11,5 +12,6 @@ import java.sql.SQLException;
 
 public interface InformationDAO {
     public void setInfo(final String path, final String date, final String type) throws SQLException;
-    public void getInfo() throws SQLException;
+    public List<String> getInfo() throws SQLException;
+
 }

@@ -19,7 +19,7 @@ public class Item {
 
     private File file;
 
-    Item(File file) throws SQLException {
+    public Item(File file) throws SQLException {
         setFile(file);
         setName();
         setPath();
@@ -27,11 +27,14 @@ public class Item {
         setType();
         setDate();
         setSize();
-        //addToDB();
+        addToDB();
     }
 
-    Item(){
-
+    Item(final  String name, final String date, final String extension, final String size, final String type,
+         final String path){
+        this.name.set(name);
+        this.date.set(date);
+        this.extension.set(extension);
     }
     private void setFile(File file){
         this.file = file;

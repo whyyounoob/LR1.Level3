@@ -111,7 +111,11 @@ public class EnterWindow extends Application {
         guestbtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                EnterStage.setScene(new MainWindow(new Pane(), "Guest"));
+                try {
+                    EnterStage.setScene(new MainWindow(new Pane(), "Guest"));
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         });
 

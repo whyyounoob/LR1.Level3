@@ -29,30 +29,30 @@ public class Item {
         setSize();
         addToDB();
     }
-
-    Item(final  String name, final String date, final String extension, final String size, final String type,
-         final String path){
-        this.name.set(name);
+    public Item(File file, String type, String date){
+        setFile(file);
+        setName();
+        setPath();
+        setExtension();
+        this.type.set(type);
         this.date.set(date);
-        this.extension.set(extension);
+        setSize();
     }
+
     private void setFile(File file){
         this.file = file;
     }
 
     private void setName(){
         this.name.set(file.getName());
-        System.out.println(this.name);
     }
 
     private void setPath(){
         this.path = new String(file.getAbsolutePath());
-        System.out.println(file.getAbsolutePath());
     }
 
     private void setExtension(){
         this.extension.set(path.substring(path.lastIndexOf(".")+1));
-        System.out.println(this.extension);
     }
 
     private void setType(){
@@ -77,13 +77,11 @@ public class Item {
                 type.set(Constants.VIDEO);
                 break;
         }
-        System.out.println(type.getValue());
     }
 
     private void setDate(){
         DateTimeFormatter dateTime = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         this.date.set(LocalDateTime.now().format(dateTime));
-        System.out.println(date);
     }
 
     private void setSize(){
@@ -101,7 +99,6 @@ public class Item {
             string = Double.toString(((double)size/Constants.GB));
             this.size.set((string.substring(0, string.indexOf(".")+2)) + " GB");
         }
-        System.out.println(this.size.toString());
     }
 
     private void addToDB() throws SQLException {
@@ -120,5 +117,7 @@ public class Item {
     public String getDate() { return date.getValue(); }
 
     public String getSize(){ return size.getValue();}
+
+    public String getPath(){ return path; }
 }
 

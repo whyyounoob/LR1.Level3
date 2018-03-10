@@ -12,10 +12,10 @@ import java.util.List;
 
 public class AddItem {
     private FileChooser fileChooser;
-    private ArrayList<Item> audio_list = new ArrayList<Item>();
-    private ArrayList<Item> video_list = new ArrayList<Item>();
-    private ArrayList<Item> book_list = new ArrayList<Item>();
-    private ArrayList<Item> documents_list = new ArrayList<Item>();
+    private static ArrayList<Item> audio_list = new ArrayList<Item>();
+    private static ArrayList<Item> video_list = new ArrayList<Item>();
+    private static ArrayList<Item> book_list = new ArrayList<Item>();
+    private static ArrayList<Item> documents_list = new ArrayList<Item>();
 
     public AddItem() throws SQLException {
         fileChooser = new FileChooser();
@@ -27,18 +27,11 @@ public class AddItem {
                 Constants.ALL_EXTENSIONS));
         setList(getFiles());
     }
-    public AddItem(final String path){
-    }
 
-    public List<File> getfromDB(final List<String> list){
-        List<File> fileList = new ArrayList<File>();
-        for(int i=0; i<list.size(); i++){
-            File file = new File(list.get(i));
-            if(file.exists()){
-                fileList.add(file);
-            }
+    public AddItem(List<Item> items, String type){
+        for(int i = 0; i<items.size(); i++){
+            setType(items.get(i), type);
         }
-        return fileList;
     }
 
     public List<File> getFiles(){
@@ -49,25 +42,45 @@ public class AddItem {
     public void setList(final List<File> list) throws SQLException {
         for(int i = 0; i<list.size(); i++){
             Item item = new Item(list.get(i));
-            switch(item.getType()){
-                case "AUDIO":
-                    audio_list.add(item);
-                    break;
-                case "BOOK":
-                    book_list.add(item);
-                    break;
-                case "DOCUMENTS":
-                    documents_list.add(item);
-                    break;
-                case "VIDEO":
-                    video_list.add(item);
-                    break;
-            }
+            setType(item, item.getType());
+        }
+    }
+
+    public void setType(final Item item, final String type){
+        switch(type){
+            case "AUDIO":
+                audio_list.add(item);
+                break;
+            case "BOOK":
+                book_list.add(item);
+                break;
+            case "DOCUMENTS":
+                documents_list.add(item);
+                break;
+            case "VIDEO":
+                video_list.add(item);
+                break;
         }
     }
 
     public ArrayList<Item> getAudio_list() {
         return audio_list;
+    }
+
+    public void clearAudio_list(){
+        audio_list.clear();
+    }
+
+    public void clearVideo_list(){
+        video_list.clear();
+    }
+
+    public void clearBook_list(){
+        book_list.clear();
+    }
+
+    public void clearDocuments_list(){
+        documents_list.clear();
     }
 
     public ArrayList<Item> getBook_list() {

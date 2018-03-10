@@ -6,7 +6,9 @@ package by.company.DAO;
  * @since 27.02.2018
  */
 import by.company.LOGIC.AddItem;
+import by.company.LOGIC.Item;
 
+import java.io.File;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,13 +32,18 @@ public class MyInformationDAO implements InformationDAO {
         connection.close();
     }
 
-    public List<String> getInfo() throws SQLException {
-        List<String> list = new ArrayList<String>();
+    public List<Item> getInfo(String needed_type) throws SQLException {
+        List<Item> list = new ArrayList<Item>();
         Connection connection = new MyDAOFactory().getConnection();
-        Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery(SQLConstants.SELECT_INFO);
+        PreparedStatement statement = connection.prepareStatement(SQLConstants.SELECT_INFO);
+        statement.setString(1,needed_type);
+        ResultSet resultSet = statement.executeQuery();
         while(resultSet.next()){
-
+            File file = new File(resultSet.getString(1));
+            if(file.exists()){
+                Item item = new Item(file, needed_type, resultSet.getString(2));
+                list.add(item);
+            }
         }
         return list;
     }

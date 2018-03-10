@@ -40,9 +40,11 @@ public class AddItem {
     }
 
     public void setList(final List<File> list) throws SQLException {
-        for(int i = 0; i<list.size(); i++){
-            Item item = new Item(list.get(i));
-            setType(item, item.getType());
+        if(list != null) {
+            for (int i = 0; i < list.size(); i++) {
+                Item item = new Item(list.get(i));
+                setType(item, item.getType());
+            }
         }
     }
 

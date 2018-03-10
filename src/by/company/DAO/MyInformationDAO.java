@@ -9,6 +9,7 @@ import by.company.LOGIC.AddItem;
 import by.company.LOGIC.Item;
 
 import java.io.File;
+import java.net.ConnectException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +33,7 @@ public class MyInformationDAO implements InformationDAO {
         connection.close();
     }
 
+    @Override
     public List<Item> getInfo(String needed_type) throws SQLException {
         List<Item> list = new ArrayList<Item>();
         Connection connection = new MyDAOFactory().getConnection();
@@ -45,7 +47,20 @@ public class MyInformationDAO implements InformationDAO {
                 list.add(item);
             }
         }
+        resultSet.close();
+        statement.close();
+        connection.close();
         return list;
+    }
+
+    @Override
+    public void removeInfo(String path) throws SQLException {
+        Connection connection = new MyDAOFactory().getConnection();
+        PreparedStatement statement = connection.prepareStatement(SQLConstants.DELETE_INFO);
+        statement.setString(1,path);
+        statement.execute();
+        statement.close();
+        connection.close();
     }
 
 

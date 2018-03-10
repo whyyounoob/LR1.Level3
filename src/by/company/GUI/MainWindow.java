@@ -13,6 +13,7 @@ import by.company.LOGIC.Constants;
 import by.company.LOGIC.Item;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -29,6 +30,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 //name, date, type, size
 public class MainWindow extends Scene {
@@ -38,7 +40,6 @@ public class MainWindow extends Scene {
     private Button DocumentButton;
     private Button BookButton;
     private TextField search_field;
-    private Button search_btn;
     private Label username_lbl;
     private Button add_btn;
     private Button remove_btn;
@@ -51,6 +52,7 @@ public class MainWindow extends Scene {
     private ObservableList<Item> audio_list = FXCollections.observableArrayList();
     private ObservableList<Item> book_list = FXCollections.observableArrayList();
     private ObservableList<Item> documents_list = FXCollections.observableArrayList();
+    String tableState = new String(Constants.VIDEO);
 
 
 
@@ -63,7 +65,6 @@ public class MainWindow extends Scene {
         DocumentButton = new Button("Document");
         BookButton = new Button("Book");
         search_field = new TextField();
-        search_btn = new Button("Search");
         add_btn = new Button("Add");
         remove_btn = new Button("Remove");
         table = new TableView<Item>();
@@ -71,6 +72,17 @@ public class MainWindow extends Scene {
         column_date = new TableColumn<Item, String>("Date");
         column_size = new TableColumn<Item, String>("Size");
         column_type = new TableColumn<Item, String>("Type");
+        add_btn.setDisable(false);
+        remove_btn.setDisable(true);
+
+        switch(username){
+            case "admin":
+                remove_btn.setDisable(false);
+                break;
+            case "Guest":
+                add_btn.setDisable(true);
+                break;
+        }
 
         column_name.setCellValueFactory(new PropertyValueFactory<>("name"));
         column_type.setCellValueFactory(new PropertyValueFactory<>("extension"));
@@ -95,7 +107,7 @@ public class MainWindow extends Scene {
 
 
         MainPane.getChildren().addAll(username_lbl, VideoButton, MusicButton, DocumentButton,
-                    BookButton, search_field, search_btn, add_btn, table, remove_btn);
+                    BookButton, search_field, add_btn, table, remove_btn);
 
         table.setLayoutX(120);
         table.setLayoutY(40);
@@ -115,6 +127,7 @@ public class MainWindow extends Scene {
             @Override
             public void handle(ActionEvent event) {
                 table.setItems(video_list);
+                tableState = new String(Constants.VIDEO);
             }
         });
 
@@ -126,6 +139,7 @@ public class MainWindow extends Scene {
             @Override
             public void handle(ActionEvent event) {
                 table.setItems(audio_list);
+                tableState = new String(Constants.AUDIO);
             }
         });
 
@@ -137,6 +151,7 @@ public class MainWindow extends Scene {
             @Override
             public void handle(ActionEvent event) {
                 table.setItems(documents_list);
+                tableState = new String(Constants.DOCUMENTS);
             }
         });
 
@@ -148,6 +163,7 @@ public class MainWindow extends Scene {
             @Override
             public void handle(ActionEvent event) {
                 table.setItems(book_list);
+                tableState = new String(Constants.BOOK);
             }
         });
 
@@ -181,7 +197,10 @@ public class MainWindow extends Scene {
         remove_btn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                
+                Item item = table.getSelectionModel().getSelectedItem();
+                if(item != null){
+                    removeItem(item);
+                }
             }
         });
 
@@ -190,6 +209,20 @@ public class MainWindow extends Scene {
                     "-fx-font-size: 25;" +
                     "-fx-border-style: solid");
 
+        search_field.textProperty().addListener((observable, oldValue, newValue) -> {
+            FilteredList<Item> lst = new FilteredList<>(setListAtSearch(),p -> true);
+            lst.setPredicate(item -> {
+                if(newValue == null || newValue.isEmpty()){
+                    return true;
+                }
+                String lowerCaseFilter = newValue.toLowerCase();
+                if(item.getName().toLowerCase().contains(lowerCaseFilter)){
+                    return true;
+                }else { return false;}
+            });
+            table.setItems(lst);
+        });
+
         search_field.setStyle("-fx-pref-height: 40;" +
                     "-fx-pref-width: 250;" +
                     "-fx-font-size: 18");
@@ -197,10 +230,6 @@ public class MainWindow extends Scene {
         search_field.setLayoutY(0);
         search_field.setPromptText("What you want?");
 
-        search_btn.setLayoutX(530);
-        search_btn.setLayoutY(0);
-        search_btn.setStyle("-fx-pref-height: 40;" +
-                    "-fx-pref-width: 80");
 
     }
 
@@ -239,6 +268,45 @@ public class MainWindow extends Scene {
             e.printStackTrace();
         }
     }
+
+    private ObservableList<Item> setListAtSearch(){
+        switch (tableState){
+            case "AUDIO":
+               return audio_list;
+            case "BOOK":
+                return book_list;
+            case "DOCUMENTS":
+                return documents_list;
+            case "VIDEO":
+                return video_list;
+        }
+        return null;
+    }
+
+    private void removeItem(Item item){
+        switch (tableState){
+            case "AUDIO":
+                audio_list.remove(item);
+                break;
+            case "BOOK":
+                book_list.remove(item);
+                break;
+            case "DOCUMENTS":
+                documents_list.remove(item);
+                break;
+            case "VIDEO":
+                video_list.remove(item);
+                break;
+        }
+        MyInformationDAO myInformationDAO = new MyInformationDAO();
+        try {
+            myInformationDAO.removeInfo(item.getPath());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
 }
 
 

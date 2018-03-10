@@ -15,5 +15,6 @@ import java.util.List;
 public interface InformationDAO {
     public void setInfo(final String path, final String date, final String type) throws SQLException;
     public List<Item> getInfo(String needed_typ) throws SQLException;
+    public void removeInfo(String path) throws SQLException;
 
 }

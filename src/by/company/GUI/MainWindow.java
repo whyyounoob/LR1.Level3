@@ -185,7 +185,12 @@ public class MainWindow extends Scene {
                     documents_list.addAll(addItem.getDocuments_list());
                     addItem.clearDocuments_list();
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Hmm...");
+                    alert.setHeaderText(null);
+                    alert.setContentText("This file yje est`");
+                    alert.showAndWait();
+
                 }
             }
         });

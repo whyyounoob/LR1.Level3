@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import by.company.DAO.SQLConstants;
+import by.company.LOGIC.RegEx;
 import javafx.scene.control.Alert;
 
 public class MyUsersDAO implements UsersDAO {
@@ -40,12 +41,15 @@ public class MyUsersDAO implements UsersDAO {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Ooops");
         alert.setHeaderText(null);
-
+        RegEx reg = new RegEx();
         PreparedStatement preparedStatementUsername = connection.prepareStatement(SQLConstants.CHECK_USERNAME);
         preparedStatementUsername.setString(1,username);
         PreparedStatement preparedStatementEmail = connection.prepareStatement(SQLConstants.CHECK_EMAIL);
         preparedStatementEmail.setString(1,email);
-        if(preparedStatementUsername.executeQuery().next()){
+        if(!reg.checkEmail(email)){
+            alert.setContentText("Incorrect email");
+            alert.showAndWait();
+        } else if(preparedStatementUsername.executeQuery().next()){
             alert.setContentText("Sorry, but this username is already taken.");
             alert.showAndWait();
             preparedStatementUsername.close();
@@ -58,9 +62,11 @@ public class MyUsersDAO implements UsersDAO {
             ps.setString(1, username);
             ps.setString(2,email);
             ps.setString(3, password);
+            ps.setInt(4,0);
             ps.execute();
             ps.close();
             alert.setAlertType(Alert.AlertType.INFORMATION);
+            alert.setContentText("Yspeh!!!");
             alert.show();
 
         }else{

@@ -119,5 +119,7 @@ public class Item {
     public String getSize(){ return size.getValue();}
 
     public String getPath(){ return path; }
+
+    public File getFile(){ return file;}
 }
 

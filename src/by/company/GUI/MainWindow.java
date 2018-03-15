@@ -25,6 +25,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 
 
+import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -53,12 +54,14 @@ public class MainWindow extends Scene {
     private ObservableList<Item> book_list = FXCollections.observableArrayList();
     private ObservableList<Item> documents_list = FXCollections.observableArrayList();
     String tableState = new String(Constants.VIDEO);
+    private String username;
 
 
 
     public MainWindow(Pane MainPane, String username) throws SQLException {
-        super(MainPane, 610,400);
 
+        super(MainPane, 610,400);
+        this.username = new String(username);
         username_lbl = new Label("Welcome, " + username);
         VideoButton = new Button("Video");
         MusicButton = new Button("Music");
@@ -82,6 +85,8 @@ public class MainWindow extends Scene {
             case "Guest":
                 add_btn.setDisable(true);
                 break;
+            default:
+                if(true){}
         }
 
         column_name.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -171,29 +176,7 @@ public class MainWindow extends Scene {
                     "-fx-pref-height: 60");
         add_btn.setLayoutX(0);
         add_btn.setLayoutY(280);
-        add_btn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                try {
-                    AddItem addItem = new AddItem();
-                    audio_list.addAll(addItem.getAudio_list());
-                    addItem.clearAudio_list();
-                    video_list.addAll(addItem.getVideo_list());
-                    addItem.clearVideo_list();
-                    book_list.addAll(addItem.getBook_list());
-                    addItem.clearBook_list();
-                    documents_list.addAll(addItem.getDocuments_list());
-                    addItem.clearDocuments_list();
-                } catch (SQLException e) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Hmm...");
-                    alert.setHeaderText(null);
-                    alert.setContentText("This file yje est`");
-                    alert.showAndWait();
-
-                }
-            }
-        });
+        add_btn.setOnAction(new AddAction());
 
         remove_btn.setLayoutY(340);
         remove_btn.setLayoutX(0);
@@ -312,6 +295,31 @@ public class MainWindow extends Scene {
 
     }
 
+    class AddAction implements EventHandler<ActionEvent> {
+
+        @Override
+        public void handle(ActionEvent event) {
+            try {
+                AddItem addItem = new AddItem(username);
+
+                audio_list.addAll(addItem.getAudio_list());
+                addItem.clearAudio_list();
+                video_list.addAll(addItem.getVideo_list());
+                addItem.clearVideo_list();
+                book_list.addAll(addItem.getBook_list());
+                addItem.clearBook_list();
+                documents_list.addAll(addItem.getDocuments_list());
+                addItem.clearDocuments_list();
+            } catch (SQLException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Hmm...");
+                alert.setHeaderText(null);
+                alert.setContentText("Sorry, but this file already exists.");
+                alert.showAndWait();
+
+            }
+        }
+    }
 }
 
 

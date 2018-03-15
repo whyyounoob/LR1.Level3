@@ -16,8 +16,11 @@ public class AddItem {
     private static ArrayList<Item> video_list = new ArrayList<Item>();
     private static ArrayList<Item> book_list = new ArrayList<Item>();
     private static ArrayList<Item> documents_list = new ArrayList<Item>();
+    private static String usertype;
+    private long size_of_items;
 
-    public AddItem() throws SQLException {
+    public AddItem(String usertype) throws SQLException {
+        this.usertype = new String(usertype);
         fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Documents",
                 Constants.DOCUMENTS_EXTENSIONS), new FileChooser.ExtensionFilter("Book",
@@ -26,6 +29,7 @@ public class AddItem {
                 Constants.VIDEO_EXTENSIONS), new FileChooser.ExtensionFilter("All",
                 Constants.ALL_EXTENSIONS));
         setList(getFiles());
+        size_of_items = 0;
     }
 
     public AddItem(List<Item> items, String type){
@@ -39,13 +43,15 @@ public class AddItem {
         return list;
     }
 
-    public void setList(final List<File> list) throws SQLException {
+    public long setList(final List<File> list) throws SQLException {
         if(list != null) {
             for (int i = 0; i < list.size(); i++) {
                 Item item = new Item(list.get(i));
+                size_of_items += item.getFile().length();
                 setType(item, item.getType());
             }
         }
+        return size_of_items;
     }
 
     public void setType(final Item item, final String type){

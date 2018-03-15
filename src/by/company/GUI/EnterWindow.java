@@ -9,16 +9,16 @@ package by.company.GUI;
 
 import by.company.DAO.MyUsersDAO;
 import javafx.application.Application;
+import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.sql.SQLException;
 
@@ -42,37 +42,37 @@ public class EnterWindow extends Application {
     public void start(Stage EnterStage){
 
         pane = new Pane();
-        username_label = new Label("Username: ");
-        password_label = new Label("Password: ");
+        username_label = new Label(GUIConstants.USERNAME_LABEL_TEXT);
+        password_label = new Label(GUIConstants.PASSWORD_LABEL_TEXT);
         username_field = new TextField();
         password_field = new PasswordField();
-        HomeCatalog = new Label ("Home Catalog");
-        loginbtn = new Button("Log In");
-        sign_upbtn = new Button("Sign Up");
-        guestbtn = new Button("Log In as Guest");
+        HomeCatalog = new Label (GUIConstants.HOMECATALOG_LABEL);
+        loginbtn = new Button(GUIConstants.LOGINBTN_TEXT);
+        sign_upbtn = new Button(GUIConstants.SIGNUPBTN_TEXT);
+        guestbtn = new Button(GUIConstants.GUESTBTN_TEXT);
 
         pane.getChildren().addAll(HomeCatalog, username_label, password_label, username_field, password_field,
                 loginbtn, sign_upbtn, guestbtn);
         pane.setStyle("-fx-background-color: aliceblue");
 
-        HomeCatalog.setFont(new Font("Times New Roman",24));
+        HomeCatalog.setFont(new Font(GUIConstants.FONT_TEXT,GUIConstants.SIZE_24));
         HomeCatalog.setLayoutX(120);
         HomeCatalog.setLayoutY(20);
 
-        username_label.setFont(new Font("Times New Roman", 19));
+        username_label.setFont(new Font(GUIConstants.FONT_TEXT, GUIConstants.SIZE_19));
         username_label.setLayoutX(40);
         username_label.setLayoutY(70);
 
-        password_label.setFont(new Font("Times New Roman", 19));
+        password_label.setFont(new Font(GUIConstants.FONT_TEXT, GUIConstants.SIZE_19));
         password_label.setLayoutX(45);
         password_label.setLayoutY(110);
 
-        username_field.setPrefSize(200,30);
+        username_field.setPrefSize(GUIConstants.SIZE_200,GUIConstants.SIZE_30);
         username_field.setLayoutX(130);
         username_field.setLayoutY(65);
         username_field.setPromptText("Enter your username...");
 
-        password_field.setPrefSize(200,30);
+        password_field.setPrefSize(GUIConstants.SIZE_200,GUIConstants.SIZE_30);
         password_field.setLayoutX(130);
         password_field.setLayoutY(105);
         password_field.setPromptText("Enter your password...");
@@ -100,8 +100,10 @@ public class EnterWindow extends Application {
         sign_upbtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                EnterStage.setScene(new RegistrationWindow(new Pane()));
-
+                Stage stage = new Stage();
+                stage.initModality(Modality.APPLICATION_MODAL);
+                stage.setScene(new RegistrationWindow(new Pane()));
+                stage.showAndWait();
             }
         });
 

@@ -8,13 +8,11 @@ package by.company.GUI;
  */
 
 import by.company.DAO.MyUsersDAO;
-import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 
 import java.sql.SQLException;
 
@@ -122,12 +120,11 @@ public class RegistrationWindow extends Scene {
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
+
                 }
             }
         });
 
     }
-
-
 
 }

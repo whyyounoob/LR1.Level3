@@ -85,7 +85,7 @@ public class EnterWindow extends Application {
             public void handle(ActionEvent event) {
                 MyUsersDAO mud = new MyUsersDAO(username_field.getText(), password_field.getText());
                 try {
-                    if(mud.loginUser()==1){
+                    if(mud.loginUser()!=0){
                         EnterStage.setScene(new MainWindow(new Pane(), username_field.getText()));
                     }
                 } catch (SQLException e) {

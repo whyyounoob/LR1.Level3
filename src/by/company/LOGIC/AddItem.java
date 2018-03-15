@@ -19,8 +19,8 @@ public class AddItem {
     private static String usertype;
     private long size_of_items;
 
-    public AddItem(String usertype) throws SQLException {
-        this.usertype = new String(usertype);
+    public AddItem() throws SQLException {
+       // this.usertype = new String(usertype);
         fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Documents",
                 Constants.DOCUMENTS_EXTENSIONS), new FileChooser.ExtensionFilter("Book",

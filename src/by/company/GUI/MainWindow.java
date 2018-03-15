@@ -300,7 +300,7 @@ public class MainWindow extends Scene {
         @Override
         public void handle(ActionEvent event) {
             try {
-                AddItem addItem = new AddItem(username);
+                AddItem addItem = new AddItem();
 
                 audio_list.addAll(addItem.getAudio_list());
                 addItem.clearAudio_list();

@@ -9,11 +9,15 @@ package by.company.DAO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import by.company.DAO.SQLConstants;
 import by.company.LOGIC.RegEx;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ResizeFeaturesBase;
 
 public class MyUsersDAO implements UsersDAO {
 
@@ -63,6 +67,8 @@ public class MyUsersDAO implements UsersDAO {
             ps.setString(2,email);
             ps.setString(3, password);
             ps.setInt(4,0);
+            DateTimeFormatter dateTime = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+            ps.setString(5, LocalDateTime.now().format(dateTime));
             ps.execute();
             ps.close();
             alert.setAlertType(Alert.AlertType.INFORMATION);
@@ -83,10 +89,11 @@ public class MyUsersDAO implements UsersDAO {
         PreparedStatement preparedStatement = connection.prepareStatement(SQLConstants.LOGIN_USER);
         preparedStatement.setString(1,username);
         preparedStatement.setString(2,password);
-        if(preparedStatement.executeQuery().next()){
-            preparedStatement.close();
-            connection.close();
-           return 1;
+        ResultSet resultSet = preparedStatement.executeQuery();
+        if(resultSet.next()){
+                        //preparedStatement.close();
+            //connection.close();
+           return resultSet.getInt(1);
         } else{
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Ooops...");
@@ -94,6 +101,14 @@ public class MyUsersDAO implements UsersDAO {
             alert.setContentText("Something went wrong. Verify that the data entered is correct.");
             alert.showAndWait();
         }
+        //resultSet.close();
+        return 0;
+    }
+    @Override
+    public int check_info_size(String username) throws SQLException {
+        Connection connection = new MyDAOFactory().getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(SQLConstants.CHECK_SIZE_ITEMS);
+        preparedStatement.setString(1,username);
         return 0;
     }
 }

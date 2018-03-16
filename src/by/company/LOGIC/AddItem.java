@@ -2,6 +2,7 @@ package by.company.LOGIC;
 
 import by.company.DAO.MyDAOFactory;
 import by.company.DAO.MyInformationDAO;
+import by.company.DAO.MyUsersDAO;
 import javafx.scene.control.Alert;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -17,12 +18,12 @@ public class AddItem {
     private static ArrayList<Item> video_list = new ArrayList<Item>();
     private static ArrayList<Item> book_list = new ArrayList<Item>();
     private static ArrayList<Item> documents_list = new ArrayList<Item>();
-    private static String usertype;
+    private static int id;
     private int size_of_items;
     private int size_of_users;
 
-    public AddItem(int size, String usertype) throws SQLException {
-        this.usertype = new String(usertype);
+    public AddItem(int size, int id) throws SQLException {
+        this.id = id;
         size_of_users = size;
         size_of_items = 0;
         fileChooser = new FileChooser();
@@ -32,8 +33,6 @@ public class AddItem {
                 Constants.AUDIO_EXTENSIONS), new FileChooser.ExtensionFilter("Video",
                 Constants.VIDEO_EXTENSIONS), new FileChooser.ExtensionFilter("All",
                 Constants.ALL_EXTENSIONS));
-
-
     }
 
     public AddItem(List<Item> items, String type){
@@ -52,7 +51,7 @@ public class AddItem {
             for(int i = 0; i < list.size(); i++){
                 size_of_items += list.get(i).length();
             }
-            if(!usertype.equals("admin") && size_of_items>size_of_users){
+            if(id != 2 && size_of_items>size_of_users){
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Oh no...");
                 alert.setHeaderText(null);
@@ -62,11 +61,16 @@ public class AddItem {
                 for (int i = 0; i < list.size(); i++) {
                     Item item = new Item(list.get(i));
                     setType(item, item.getType());
+                    if(id != 2){
+                        size_of_users += size_of_items;
+                        MyUsersDAO myUsersDAO = new MyUsersDAO();
+                        myUsersDAO.setSize(size_of_users, id);
+                    }
                 }
             }
             //if(!usertype.equals("admin"))
         }
-        return size_of_items;
+        return size_of_users;
     }
 
     public void setType(final Item item, final String type){

@@ -21,4 +21,6 @@ public class SQLConstants {
     public static final String DELETE_INFO = new String("DELETE FROM Information WHERE path_info = ?;");
     public static final String CHECK_SIZE_ITEMS = new String("SELECT size_items, last_date FROM users " +
             "WHERE id = ?;");
+    public static  final String UPADATE_DATE_SIZE = new String("UPDATE users SET last_date = ?, " +
+            "size_items = ? WHERE id = ?;");
 }

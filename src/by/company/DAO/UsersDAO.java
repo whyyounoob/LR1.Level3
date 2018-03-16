@@ -13,4 +13,6 @@ public interface UsersDAO {
     void createUser() throws SQLException;
     int loginUser() throws SQLException;
     int check_info_size(int id) throws SQLException;
+
+    void setSize(int size, int id) throws SQLException;
 }

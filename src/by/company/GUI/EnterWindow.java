@@ -40,6 +40,7 @@ public class EnterWindow extends Application {
 
     @Override
     public void start(Stage EnterStage){
+        EnterStage.setResizable(false);
 
         pane = new Pane();
         username_label = new Label(GUIConstants.USERNAME_LABEL_TEXT);

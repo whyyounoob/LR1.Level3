@@ -304,9 +304,9 @@ public class MainWindow extends Scene {
         @Override
         public void handle(ActionEvent event) {
             try {
-                AddItem addItem = new AddItem(left_size, username);
+                AddItem addItem = new AddItem(left_size, id);
                 addItem.setList(addItem.getFiles());
-
+                whatsize();
                 audio_list.addAll(addItem.getAudio_list());
                 addItem.clearAudio_list();
                 video_list.addAll(addItem.getVideo_list());
@@ -331,9 +331,13 @@ public class MainWindow extends Scene {
             MyUsersDAO myUsersDAO = new MyUsersDAO();
             try {
                 left_size = myUsersDAO.check_info_size(id);
-                String string  = new String(Double.toString(((double)left_size/Constants.KB)));
-                addButton.setText("       Add\n(" + string.substring(0, string.indexOf(".")+2) + " KB)");
-                addButton.setAlignment(Pos.CENTER);
+                if(left_size < 0){
+                    addButton.setDisable(true);
+                }else{
+                    String string  = new String(Double.toString(((double)left_size/Constants.KB)));
+                    addButton.setText("       Add\n(" + string.substring(0, string.indexOf(".")+2) + " KB)");
+                    addButton.setAlignment(Pos.CENTER);
+                }
             } catch (SQLException e) {
                 e.printStackTrace();
             }

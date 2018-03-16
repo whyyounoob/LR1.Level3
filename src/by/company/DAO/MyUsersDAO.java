@@ -68,7 +68,7 @@ public class MyUsersDAO implements UsersDAO {
             ps.setString(1, username);
             ps.setString(2,email);
             ps.setString(3, password);
-            ps.setInt(4,0);
+            ps.setInt(4,1);
             DateTimeFormatter dateTime = DateTimeFormatter.ofPattern("dd.MM.yyyy");
             ps.setString(5, LocalDateTime.now().format(dateTime));
             ps.execute();
@@ -118,6 +118,13 @@ public class MyUsersDAO implements UsersDAO {
             DateTimeFormatter dateTime = DateTimeFormatter.ofPattern("dd.MM.yyyy");
             if(LocalDateTime.now().format(dateTime).equals(resultSet.getString(2))){
                 size -= resultSet.getInt(1);
+            } else {
+                PreparedStatement statement = connection.prepareStatement(SQLConstants.UPADATE_DATE_SIZE);
+                statement.setString(1, LocalDateTime.now().format(dateTime));
+                statement.setInt(2, 0);
+                statement.setInt(3,id);
+                statement.execute();
+                statement.close();
             }
         }
         resultSet.close();
@@ -126,4 +133,15 @@ public class MyUsersDAO implements UsersDAO {
         return size;
     }
 
+    @Override
+    public void setSize(int size, int id) throws SQLException {
+        Connection connection = new MyDAOFactory().getConnection();
+        DateTimeFormatter dateTime = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        PreparedStatement preparedStatement = connection.prepareStatement(SQLConstants.UPADATE_DATE_SIZE);
+        preparedStatement.setString(1, LocalDateTime.now().format(dateTime));
+        preparedStatement.setInt(2, size);
+        preparedStatement.setInt(3,id);
+        preparedStatement.execute();
+        connection.close();
+    }
 }

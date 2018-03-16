@@ -13,8 +13,8 @@ import java.util.List;
  */
 
 public interface InformationDAO {
-    public void setInfo(final String path, final String date, final String type) throws SQLException;
-    public List<Item> getInfo(String needed_typ) throws SQLException;
-    public void removeInfo(String path) throws SQLException;
+    void setInfo(String path, final String date, final String type) throws SQLException;
+    List<Item> getInfo(String needed_typ) throws SQLException;
+    void removeInfo(String path) throws SQLException;
 
 }

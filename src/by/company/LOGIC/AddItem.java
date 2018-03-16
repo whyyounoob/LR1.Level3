@@ -2,6 +2,7 @@ package by.company.LOGIC;
 
 import by.company.DAO.MyDAOFactory;
 import by.company.DAO.MyInformationDAO;
+import javafx.scene.control.Alert;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -17,10 +18,13 @@ public class AddItem {
     private static ArrayList<Item> book_list = new ArrayList<Item>();
     private static ArrayList<Item> documents_list = new ArrayList<Item>();
     private static String usertype;
-    private long size_of_items;
+    private int size_of_items;
+    private int size_of_users;
 
-    public AddItem() throws SQLException {
-       // this.usertype = new String(usertype);
+    public AddItem(int size, String usertype) throws SQLException {
+        this.usertype = new String(usertype);
+        size_of_users = size;
+        size_of_items = 0;
         fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Documents",
                 Constants.DOCUMENTS_EXTENSIONS), new FileChooser.ExtensionFilter("Book",
@@ -28,8 +32,8 @@ public class AddItem {
                 Constants.AUDIO_EXTENSIONS), new FileChooser.ExtensionFilter("Video",
                 Constants.VIDEO_EXTENSIONS), new FileChooser.ExtensionFilter("All",
                 Constants.ALL_EXTENSIONS));
-        setList(getFiles());
-        size_of_items = 0;
+
+
     }
 
     public AddItem(List<Item> items, String type){
@@ -43,13 +47,24 @@ public class AddItem {
         return list;
     }
 
-    public long setList(final List<File> list) throws SQLException {
+    public int setList(final List<File> list) throws SQLException {
         if(list != null) {
-            for (int i = 0; i < list.size(); i++) {
-                Item item = new Item(list.get(i));
-                size_of_items += item.getFile().length();
-                setType(item, item.getType());
+            for(int i = 0; i < list.size(); i++){
+                size_of_items += list.get(i).length();
             }
+            if(!usertype.equals("admin") && size_of_items>size_of_users){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Oh no...");
+                alert.setHeaderText(null);
+                alert.setContentText("File size is too large.");
+                alert.showAndWait();
+            } else{
+                for (int i = 0; i < list.size(); i++) {
+                    Item item = new Item(list.get(i));
+                    setType(item, item.getType());
+                }
+            }
+            //if(!usertype.equals("admin"))
         }
         return size_of_items;
     }

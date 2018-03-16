@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import by.company.DAO.SQLConstants;
+import by.company.LOGIC.Constants;
 import by.company.LOGIC.RegEx;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ResizeFeaturesBase;
@@ -38,6 +39,7 @@ public class MyUsersDAO implements UsersDAO {
         username = new String(un);
         password = new String(pw);
     }
+    public MyUsersDAO(){}
 
     @Override
     public void createUser() throws SQLException {
@@ -91,9 +93,10 @@ public class MyUsersDAO implements UsersDAO {
         preparedStatement.setString(2,password);
         ResultSet resultSet = preparedStatement.executeQuery();
         if(resultSet.next()){
-                        //preparedStatement.close();
-            //connection.close();
-           return resultSet.getInt(1);
+            int ret = resultSet.getInt(1);
+            preparedStatement.close();
+            connection.close();
+           return ret;
         } else{
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Ooops...");
@@ -101,14 +104,26 @@ public class MyUsersDAO implements UsersDAO {
             alert.setContentText("Something went wrong. Verify that the data entered is correct.");
             alert.showAndWait();
         }
-        //resultSet.close();
+        connection.close();
         return 0;
     }
     @Override
-    public int check_info_size(String username) throws SQLException {
+    public int check_info_size(int id) throws SQLException {
+        int size = Constants.MB_10;
         Connection connection = new MyDAOFactory().getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(SQLConstants.CHECK_SIZE_ITEMS);
-        preparedStatement.setString(1,username);
-        return 0;
+        preparedStatement.setInt(1,id);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        if(resultSet.next()){
+            DateTimeFormatter dateTime = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+            if(LocalDateTime.now().format(dateTime).equals(resultSet.getString(2))){
+                size -= resultSet.getInt(1);
+            }
+        }
+        resultSet.close();
+        preparedStatement.close();
+        connection.close();
+        return size;
     }
+
 }

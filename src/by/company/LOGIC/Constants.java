@@ -4,7 +4,7 @@ public class Constants {
     public static final long KB = 1024;
     public static final long MB = 1024*1024;
     public static final long GB = 1024*1024*1024;
-    public static final long MB_10= 10485760;
+    public static final int MB_10= 10485760;
 
     public  static final String DOCUMENTS = new String("DOCUMENTS");
     public static final String BOOK = new String("BOOK");

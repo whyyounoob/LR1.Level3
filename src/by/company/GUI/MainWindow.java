@@ -8,6 +8,7 @@ package by.company.GUI;
  */
 
 import by.company.DAO.MyInformationDAO;
+import by.company.DAO.MyUsersDAO;
 import by.company.LOGIC.AddItem;
 import by.company.LOGIC.Constants;
 import by.company.LOGIC.Item;
@@ -16,6 +17,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -25,25 +27,23 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 
 
-import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+
 
 //name, date, type, size
 public class MainWindow extends Scene {
 
-    private Button VideoButton;
-    private Button MusicButton;
-    private Button DocumentButton;
-    private Button BookButton;
-    private TextField search_field;
-    private Label username_lbl;
-    private Button add_btn;
-    private Button remove_btn;
+    private Button videoButton;
+    private Button musicButton;
+    private Button documentButton;
+    private Button bookButton;
+    private TextField searchField;
+    private Label usernameLabel;
+    private Button addButton;
+    private Button remooveButton;
     private TableView<Item> table;
     private TableColumn<Item, String> column_name;
     private TableColumn<Item, String> column_date;
@@ -55,38 +55,41 @@ public class MainWindow extends Scene {
     private ObservableList<Item> documents_list = FXCollections.observableArrayList();
     String tableState = new String(Constants.VIDEO);
     private String username;
+    private int id;
+    int left_size;
 
 
 
-    public MainWindow(Pane MainPane, String username) throws SQLException {
+    public MainWindow(Pane MainPane, String username, int id) throws SQLException {
 
         super(MainPane, 610,400);
         this.username = new String(username);
-        username_lbl = new Label("Welcome, " + username);
-        VideoButton = new Button("Video");
-        MusicButton = new Button("Music");
-        DocumentButton = new Button("Document");
-        BookButton = new Button("Book");
-        search_field = new TextField();
-        add_btn = new Button("Add");
-        remove_btn = new Button("Remove");
+        this.id = id;
+        usernameLabel = new Label("Welcome, " + username);
+        videoButton = new Button("Video");
+        musicButton = new Button("Music");
+        documentButton = new Button("Document");
+        bookButton = new Button("Book");
+        searchField = new TextField();
+        addButton = new Button("Add");
+        remooveButton = new Button("Remove");
         table = new TableView<Item>();
         column_name = new TableColumn<Item, String>("Name");
         column_date = new TableColumn<Item, String>("Date");
         column_size = new TableColumn<Item, String>("Size");
         column_type = new TableColumn<Item, String>("Type");
-        add_btn.setDisable(false);
-        remove_btn.setDisable(true);
+        addButton.setDisable(false);
+        remooveButton.setDisable(true);
 
-        switch(username){
+        whatsize();
+
+        switch (username) {
             case "admin":
-                remove_btn.setDisable(false);
+                remooveButton.setDisable(false);
                 break;
             case "Guest":
-                add_btn.setDisable(true);
+                addButton.setDisable(true);
                 break;
-            default:
-                if(true){}
         }
 
         column_name.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -111,8 +114,8 @@ public class MainWindow extends Scene {
         });
 
 
-        MainPane.getChildren().addAll(username_lbl, VideoButton, MusicButton, DocumentButton,
-                    BookButton, search_field, add_btn, table, remove_btn);
+        MainPane.getChildren().addAll(usernameLabel, videoButton, musicButton, documentButton,
+                    bookButton, searchField, addButton, table, remooveButton);
 
         table.setLayoutX(120);
         table.setLayoutY(40);
@@ -124,11 +127,11 @@ public class MainWindow extends Scene {
         column_size.setStyle("-fx-pref-width: 90;");
         column_date.setStyle("-fx-pref-width: 100;");
 
-        VideoButton.setLayoutX(0);
-        VideoButton.setLayoutY(40);
-        VideoButton.setStyle("-fx-pref-width: 120;" +
+        videoButton.setLayoutX(0);
+        videoButton.setLayoutY(40);
+        videoButton.setStyle("-fx-pref-width: 120;" +
                     "-fx-pref-height: 60");
-        VideoButton.setOnAction(new EventHandler<ActionEvent>() {
+        videoButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 table.setItems(video_list);
@@ -136,11 +139,11 @@ public class MainWindow extends Scene {
             }
         });
 
-        MusicButton.setStyle("-fx-pref-width: 120;" +
+        musicButton.setStyle("-fx-pref-width: 120;" +
                     "-fx-pref-height: 60");
-        MusicButton.setLayoutX(0);
-        MusicButton.setLayoutY(100);
-        MusicButton.setOnAction(new EventHandler<ActionEvent>() {
+        musicButton.setLayoutX(0);
+        musicButton.setLayoutY(100);
+        musicButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 table.setItems(audio_list);
@@ -148,11 +151,11 @@ public class MainWindow extends Scene {
             }
         });
 
-        DocumentButton.setStyle("-fx-pref-width: 120;" +
+        documentButton.setStyle("-fx-pref-width: 120;" +
                     "-fx-pref-height: 60");
-        DocumentButton.setLayoutX(0);
-        DocumentButton.setLayoutY(160);
-        DocumentButton.setOnAction(new EventHandler<ActionEvent>() {
+        documentButton.setLayoutX(0);
+        documentButton.setLayoutY(160);
+        documentButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 table.setItems(documents_list);
@@ -160,11 +163,11 @@ public class MainWindow extends Scene {
             }
         });
 
-        BookButton.setStyle("-fx-pref-width: 120;" +
+        bookButton.setStyle("-fx-pref-width: 120;" +
                     "-fx-pref-height: 60");
-        BookButton.setLayoutX(0);
-        BookButton.setLayoutY(220);
-        BookButton.setOnAction(new EventHandler<ActionEvent>() {
+        bookButton.setLayoutX(0);
+        bookButton.setLayoutY(220);
+        bookButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 table.setItems(book_list);
@@ -172,17 +175,17 @@ public class MainWindow extends Scene {
             }
         });
 
-        add_btn.setStyle("-fx-pref-width: 120;" +
+        addButton.setStyle("-fx-pref-width: 120;" +
                     "-fx-pref-height: 60");
-        add_btn.setLayoutX(0);
-        add_btn.setLayoutY(280);
-        add_btn.setOnAction(new AddAction());
+        addButton.setLayoutX(0);
+        addButton.setLayoutY(280);
+        addButton.setOnAction(new AddAction());
 
-        remove_btn.setLayoutY(340);
-        remove_btn.setLayoutX(0);
-        remove_btn.setStyle("-fx-pref-width: 120;" +
+        remooveButton.setLayoutY(340);
+        remooveButton.setLayoutX(0);
+        remooveButton.setStyle("-fx-pref-width: 120;" +
                 "-fx-pref-height: 60;");
-        remove_btn.setOnAction(new EventHandler<ActionEvent>() {
+        remooveButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 Item item = table.getSelectionModel().getSelectedItem();
@@ -192,12 +195,12 @@ public class MainWindow extends Scene {
             }
         });
 
-        username_lbl.setStyle("-fx-pref-height: 40;" +
+        usernameLabel.setStyle("-fx-pref-height: 40;" +
                     "-fx-pref-width: 280;" +
                     "-fx-font-size: 25;" +
                     "-fx-border-style: solid");
 
-        search_field.textProperty().addListener((observable, oldValue, newValue) -> {
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
             FilteredList<Item> lst = new FilteredList<>(setListAtSearch(),p -> true);
             lst.setPredicate(item -> {
                 if(newValue == null || newValue.isEmpty()){
@@ -211,12 +214,13 @@ public class MainWindow extends Scene {
             table.setItems(lst);
         });
 
-        search_field.setStyle("-fx-pref-height: 40;" +
+        searchField.setStyle("-fx-pref-height: 40;" +
                     "-fx-pref-width: 250;" +
                     "-fx-font-size: 18");
-        search_field.setLayoutX(280);
-        search_field.setLayoutY(0);
-        search_field.setPromptText("What you want?");
+        searchField.setLayoutX(280);
+        searchField.setLayoutY(0);
+        searchField.setPromptText("What you want?");
+
 
 
     }
@@ -300,7 +304,8 @@ public class MainWindow extends Scene {
         @Override
         public void handle(ActionEvent event) {
             try {
-                AddItem addItem = new AddItem();
+                AddItem addItem = new AddItem(left_size, username);
+                addItem.setList(addItem.getFiles());
 
                 audio_list.addAll(addItem.getAudio_list());
                 addItem.clearAudio_list();
@@ -311,13 +316,28 @@ public class MainWindow extends Scene {
                 documents_list.addAll(addItem.getDocuments_list());
                 addItem.clearDocuments_list();
             } catch (SQLException e) {
+                e.printStackTrace();
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Hmm...");
                 alert.setHeaderText(null);
                 alert.setContentText("Sorry, but this file already exists.");
                 alert.showAndWait();
-
             }
+        }
+    }
+
+    public void whatsize() {
+        if (id != 0 && id != 2) {
+            MyUsersDAO myUsersDAO = new MyUsersDAO();
+            try {
+                left_size = myUsersDAO.check_info_size(id);
+                String string  = new String(Double.toString(((double)left_size/Constants.KB)));
+                addButton.setText("       Add\n(" + string.substring(0, string.indexOf(".")+2) + " KB)");
+                addButton.setAlignment(Pos.CENTER);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
         }
     }
 }

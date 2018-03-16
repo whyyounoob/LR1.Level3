@@ -12,5 +12,5 @@ import java.sql.SQLException;
 public interface UsersDAO {
     void createUser() throws SQLException;
     int loginUser() throws SQLException;
-    int check_info_size(String username) throws SQLException;
+    int check_info_size(int id) throws SQLException;
 }

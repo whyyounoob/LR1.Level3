@@ -55,8 +55,11 @@ public class EnterWindow extends Application {
                 loginbtn, sign_upbtn, guestbtn);
         pane.setStyle("-fx-background-color: aliceblue");
 
-        HomeCatalog.setFont(new Font(GUIConstants.FONT_TEXT,GUIConstants.SIZE_24));
-        HomeCatalog.setLayoutX(120);
+        HomeCatalog.setStyle("-fx-font-family: sans-serif;\n" +
+                "     -fx-font-size: 28;\n" +
+                "     -fx-fill: linear-gradient(to top, cyan, dodgerblue);\n" +
+                "     -fx-effect: dropshadow(gaussian, dodgerblue, 15, 0.25, 5, 5);");
+        HomeCatalog.setLayoutX(100);
         HomeCatalog.setLayoutY(20);
 
         username_label.setFont(new Font(GUIConstants.FONT_TEXT, GUIConstants.SIZE_19));
@@ -72,6 +75,7 @@ public class EnterWindow extends Application {
         username_field.setLayoutY(65);
         username_field.setPromptText("Enter your username...");
 
+
         password_field.setPrefSize(GUIConstants.SIZE_200,GUIConstants.SIZE_30);
         password_field.setLayoutX(130);
         password_field.setLayoutY(105);
@@ -85,8 +89,9 @@ public class EnterWindow extends Application {
             public void handle(ActionEvent event) {
                 MyUsersDAO mud = new MyUsersDAO(username_field.getText(), password_field.getText());
                 try {
-                    if(mud.loginUser()!=0){
-                        EnterStage.setScene(new MainWindow(new Pane(), username_field.getText()));
+                    int id = mud.loginUser();
+                    if(id!=0){
+                        EnterStage.setScene(new MainWindow(new Pane(), username_field.getText(), id));
                     }
                 } catch (SQLException e) {
                     e.printStackTrace();
@@ -114,7 +119,7 @@ public class EnterWindow extends Application {
             @Override
             public void handle(ActionEvent event) {
                 try {
-                    EnterStage.setScene(new MainWindow(new Pane(), "Guest"));
+                    EnterStage.setScene(new MainWindow(new Pane(), "Guest", 0));
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }

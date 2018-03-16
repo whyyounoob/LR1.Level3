@@ -22,7 +22,7 @@ public class MyInformationDAO implements InformationDAO {
      * @param type - type of the file
      */
     @Override
-    public void setInfo(final String path, final String date, final String type) throws SQLException {
+    public void setInfo(String path, final String date, final String type) throws SQLException {
         Connection connection = new MyDAOFactory().getConnection();
 
         PreparedStatement preparedStatement = connection.prepareStatement(SQLConstants.INSERT_INFO);
@@ -30,6 +30,7 @@ public class MyInformationDAO implements InformationDAO {
         preparedStatement.setString(2, date);
         preparedStatement.setString(3, type);
         preparedStatement.execute();
+        preparedStatement.close();
         connection.close();
     }
 

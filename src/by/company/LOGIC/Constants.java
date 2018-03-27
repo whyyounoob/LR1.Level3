@@ -17,4 +17,12 @@ public class Constants {
     public static final String[] AUDIO_EXTENSIONS = {"*.mp3", "*.wav"};
     public static final String[] ALL_EXTENSIONS = {"*.docx", "*.doc", "*.ppt", ".pptx", "*.xlsx", "*.pdf", "*.mkv",
             "*.avi", "*.mp4", "*.mp3", "*.wav"};
+    public static final byte[] SALT = {-95, 65, -68, -50, 13, 29, 18, 91, -9, 100, 91, -17, -14, 45, 124, 79,
+            -29, 70, -28, -80, 22, -57, -29, 23, -99, -6, 80, -36, 67, -114, -88, 47};
+
+    public static final String ALGORITHM = "PBKDF2WithHmacSHA1";
+    public static final int ITERATION_COUNT = 65536;
+    public static final int KEY_LENGTH = 256;
+    public static final int NUM_OF_BYTES = 32;
+
 }

@@ -7,10 +7,12 @@ package by.company.DAO;
  * @since 27.02.2018
  */
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.sql.SQLException;
 
 public interface UsersDAO {
-    void createUser() throws SQLException;
+    void createUser() throws SQLException, InvalidKeySpecException, NoSuchAlgorithmException;
     int loginUser() throws SQLException;
     int check_info_size(int id) throws SQLException;
 

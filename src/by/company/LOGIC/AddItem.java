@@ -1,7 +1,5 @@
 package by.company.LOGIC;
 
-import by.company.DAO.MyDAOFactory;
-import by.company.DAO.MyInformationDAO;
 import by.company.DAO.MyUsersDAO;
 import javafx.scene.control.Alert;
 import javafx.stage.FileChooser;
@@ -62,9 +60,9 @@ public class AddItem {
                     Item item = new Item(list.get(i));
                     setType(item, item.getType());
                     if(id != 2){
-                        size_of_users += size_of_items;
+                        size_of_users -= size_of_items;
                         MyUsersDAO myUsersDAO = new MyUsersDAO();
-                        myUsersDAO.setSize(size_of_users, id);
+                        myUsersDAO.setSize(Constants.MB_10 - size_of_users, id);
                     }
                 }
             }

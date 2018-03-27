@@ -53,6 +53,7 @@ public class MainWindow extends Scene {
     private ObservableList<Item> audio_list = FXCollections.observableArrayList();
     private ObservableList<Item> book_list = FXCollections.observableArrayList();
     private ObservableList<Item> documents_list = FXCollections.observableArrayList();
+    private ObservableList<Item> allList = FXCollections.observableArrayList();
     String tableState = new String(Constants.VIDEO);
     private String username;
     private int id;
@@ -107,12 +108,17 @@ public class MainWindow extends Scene {
             TableRow<Item> row = new TableRow<Item>();
             row.setOnMouseClicked(event -> {
                 if(event.getClickCount() == 2 && (!row.isEmpty())){
-                    openFile(row.getItem());
+                    try {
+                        openFile(row.getItem());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
             return row;
         });
-
+        column_size.setSortable(false);
+        column_date.setSortable(false);
 
         MainPane.getChildren().addAll(usernameLabel, videoButton, musicButton, documentButton,
                     bookButton, searchField, addButton, table, remooveButton);
@@ -163,8 +169,8 @@ public class MainWindow extends Scene {
             }
         });
 
-        bookButton.setStyle("-fx-pref-width: 120;" +
-                    "-fx-pref-height: 60");
+        bookButton.setStyle("-fx-pref-width: 120;"
+                   + "-fx-pref-height: 60");
         bookButton.setLayoutX(0);
         bookButton.setLayoutY(220);
         bookButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -196,7 +202,7 @@ public class MainWindow extends Scene {
         });
 
         usernameLabel.setStyle("-fx-pref-height: 40;" +
-                    "-fx-pref-width: 280;" +
+                    "-fx-pref-width: 305;" +
                     "-fx-font-size: 25;" +
                     "-fx-border-style: solid");
 
@@ -215,9 +221,9 @@ public class MainWindow extends Scene {
         });
 
         searchField.setStyle("-fx-pref-height: 40;" +
-                    "-fx-pref-width: 250;" +
+                    "-fx-pref-width: 305;" +
                     "-fx-font-size: 18");
-        searchField.setLayoutX(280);
+        searchField.setLayoutX(305);
         searchField.setLayoutY(0);
         searchField.setPromptText("What you want?");
 
@@ -253,26 +259,30 @@ public class MainWindow extends Scene {
         addItem.clearDocuments_list();
     }
 
-    private void openFile(Item item){
-        try {
+    private void openFile(Item item) throws IOException {
+
+
+        if(new File(item.getPath()).exists()){
             Desktop.getDesktop().open(new File(item.getPath()));
-        } catch (IOException e) {
-            e.printStackTrace();
+        }else{
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Ooops...");
+            alert.setHeaderText("This file does not exist.");
+            alert.setContentText("Most likely someone deleted it manually during the program.");
+            alert.showAndWait();
         }
+
+
     }
 
     private ObservableList<Item> setListAtSearch(){
-        switch (tableState){
-            case "AUDIO":
-               return audio_list;
-            case "BOOK":
-                return book_list;
-            case "DOCUMENTS":
-                return documents_list;
-            case "VIDEO":
-                return video_list;
-        }
-        return null;
+        allList.clear();
+        allList.addAll(audio_list);
+        allList.addAll(book_list);
+        allList.addAll(documents_list);
+        allList.addAll(video_list);
+
+        return allList;
     }
 
     private void removeItem(Item item){
@@ -331,11 +341,12 @@ public class MainWindow extends Scene {
             MyUsersDAO myUsersDAO = new MyUsersDAO();
             try {
                 left_size = myUsersDAO.check_info_size(id);
-                if(left_size < 0){
+                if(left_size <= 1){
+                    addButton.setText("Add\n(0 KB)");
                     addButton.setDisable(true);
                 }else{
                     String string  = new String(Double.toString(((double)left_size/Constants.KB)));
-                    addButton.setText("       Add\n(" + string.substring(0, string.indexOf(".")+2) + " KB)");
+                    addButton.setText("Add\n(" + string.substring(0, string.indexOf(".")+2) + " KB)");
                     addButton.setAlignment(Pos.CENTER);
                 }
             } catch (SQLException e) {

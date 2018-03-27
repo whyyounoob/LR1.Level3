@@ -7,6 +7,8 @@ package by.company.DAO;
  * @since 27.02.2018
  */
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,11 +16,10 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import by.company.DAO.SQLConstants;
 import by.company.LOGIC.Constants;
+import by.company.LOGIC.Encryption;
 import by.company.LOGIC.RegEx;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ResizeFeaturesBase;
 
 public class MyUsersDAO implements UsersDAO {
 
@@ -26,13 +27,13 @@ public class MyUsersDAO implements UsersDAO {
     private String email;
     private String password;
     private String repeat_password;
+    private int offset;
 
     public MyUsersDAO(final String un, final String em, final String pw, final String rpw){
         username = new String(un);
         email = new String(em);
         password = new String(pw);
         repeat_password = new String(rpw);
-
     }
 
     public MyUsersDAO(final String un, final String pw){
@@ -42,7 +43,7 @@ public class MyUsersDAO implements UsersDAO {
     public MyUsersDAO(){}
 
     @Override
-    public void createUser() throws SQLException {
+    public void createUser() throws SQLException, InvalidKeySpecException, NoSuchAlgorithmException {
         Connection connection = new MyDAOFactory().getConnection();
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Ooops");
@@ -64,10 +65,11 @@ public class MyUsersDAO implements UsersDAO {
             alert.showAndWait();
             preparedStatementEmail.close();
         } else if(password.equals(repeat_password)){
+            String hashPass = Encryption.getHashedPassword(password);
             PreparedStatement ps = connection.prepareStatement(SQLConstants.INSERT_USER);
             ps.setString(1, username);
             ps.setString(2,email);
-            ps.setString(3, password);
+            ps.setString(3, hashPass);
             ps.setInt(4,1);
             DateTimeFormatter dateTime = DateTimeFormatter.ofPattern("dd.MM.yyyy");
             ps.setString(5, LocalDateTime.now().format(dateTime));
@@ -87,23 +89,34 @@ public class MyUsersDAO implements UsersDAO {
 
     @Override
     public int loginUser() throws SQLException{
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Ooops...");
+        alert.setHeaderText(null);
         Connection connection = new MyDAOFactory().getConnection();
-        PreparedStatement preparedStatement = connection.prepareStatement(SQLConstants.LOGIN_USER);
-        preparedStatement.setString(1,username);
-        preparedStatement.setString(2,password);
-        ResultSet resultSet = preparedStatement.executeQuery();
-        if(resultSet.next()){
-            int ret = resultSet.getInt(1);
-            preparedStatement.close();
-            connection.close();
-           return ret;
-        } else{
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Ooops...");
-            alert.setHeaderText(null);
-            alert.setContentText("Something went wrong. Verify that the data entered is correct.");
+        PreparedStatement ps = connection.prepareStatement(SQLConstants.GET_PASSWORD);
+        ps.setString(1, username);
+        ResultSet rs = ps.executeQuery();
+        if(rs.next()){
+            try {
+                if(Encryption.getHashedPassword(password).equals(rs.getString(1))){
+                    int ret = rs.getInt(2);
+                    return ret;
+                }else {
+
+                    alert.setContentText("Wrong password.");
+                    alert.showAndWait();
+                }
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            } catch (InvalidKeySpecException e) {
+                e.printStackTrace();
+            }
+        }else{
+            alert.setContentText("Wrong username.");
             alert.showAndWait();
         }
+       rs.close();
+       ps.close();
         connection.close();
         return 0;
     }

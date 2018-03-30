@@ -2,12 +2,15 @@ package by.company.LOGIC;
 
 import by.company.GUI.EnterWindow;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
+/**
+ * From this class the work of the program begins.
+ *
+ * @author Maxim Borodin
+ */
 
-public class StartClass{
+public class StartClass {
 
-    public static void main(String[] args){
+    public static void main(final String[] args) {
         EnterWindow ew = new EnterWindow();
         ew.showingEW();
 

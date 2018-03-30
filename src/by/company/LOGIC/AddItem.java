@@ -12,10 +12,10 @@ import java.util.List;
 
 public class AddItem {
     private FileChooser fileChooser;
-    private static ArrayList<Item> audio_list = new ArrayList<Item>();
-    private static ArrayList<Item> video_list = new ArrayList<Item>();
-    private static ArrayList<Item> book_list = new ArrayList<Item>();
-    private static ArrayList<Item> documents_list = new ArrayList<Item>();
+    private static ArrayList<Item> audioList = new ArrayList<Item>();
+    private static ArrayList<Item> videoList = new ArrayList<Item>();
+    private static ArrayList<Item> bookList = new ArrayList<Item>();
+    private static ArrayList<Item> documentList = new ArrayList<Item>();
     private static int id;
     private int size_of_items;
     private int size_of_users;
@@ -74,49 +74,49 @@ public class AddItem {
     public void setType(final Item item, final String type){
         switch(type){
             case "AUDIO":
-                audio_list.add(item);
+                audioList.add(item);
                 break;
             case "BOOK":
-                book_list.add(item);
+                bookList.add(item);
                 break;
             case "DOCUMENTS":
-                documents_list.add(item);
+                documentList.add(item);
                 break;
             case "VIDEO":
-                video_list.add(item);
+                videoList.add(item);
                 break;
         }
     }
 
-    public ArrayList<Item> getAudio_list() {
-        return audio_list;
+    public ArrayList<Item> getaudioList() {
+        return audioList;
     }
 
-    public void clearAudio_list(){
-        audio_list.clear();
+    public void clearaudioList(){
+        audioList.clear();
     }
 
-    public void clearVideo_list(){
-        video_list.clear();
+    public void clearvideoList(){
+        videoList.clear();
     }
 
-    public void clearBook_list(){
-        book_list.clear();
+    public void clearbookList(){
+        bookList.clear();
     }
 
-    public void clearDocuments_list(){
-        documents_list.clear();
+    public void cleardocumentList(){
+        documentList.clear();
     }
 
-    public ArrayList<Item> getBook_list() {
-        return book_list;
+    public ArrayList<Item> getbookList() {
+        return bookList;
     }
 
-    public ArrayList<Item> getDocuments_list() {
-        return documents_list;
+    public ArrayList<Item> getdocumentList() {
+        return documentList;
     }
 
-    public ArrayList<Item> getVideo_list() {
-        return video_list;
+    public ArrayList<Item> getvideoList() {
+        return videoList;
     }
 }

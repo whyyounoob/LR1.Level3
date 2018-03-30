@@ -1,12 +1,5 @@
 package by.company.GUI;
 
-/**
- * This class create scene for main window
- * @author Maxim Borodin 650505-1
- * @version 0.0.2
- * @since 27.02.2018
- */
-
 import by.company.DAO.MyInformationDAO;
 import by.company.DAO.MyUsersDAO;
 import by.company.LOGIC.AddItem;
@@ -19,21 +12,29 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
+import java.awt.Desktop;
 
-
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 
+/**
+ * This class create scene for main window.
+ *
+ * @author Maxim Borodin 650505-1
+ * @version 0.0.2
+ * @since 27.02.2018
+ */
 
-//name, date, type, size
 public class MainWindow extends Scene {
 
     private Button videoButton;
@@ -45,28 +46,28 @@ public class MainWindow extends Scene {
     private Button addButton;
     private Button remooveButton;
     private TableView<Item> table;
-    private TableColumn<Item, String> column_name;
-    private TableColumn<Item, String> column_date;
-    private TableColumn column_type;
-    private TableColumn<Item, String> column_size;
-    private ObservableList<Item> video_list = FXCollections.observableArrayList();
-    private ObservableList<Item> audio_list = FXCollections.observableArrayList();
-    private ObservableList<Item> book_list = FXCollections.observableArrayList();
-    private ObservableList<Item> documents_list = FXCollections.observableArrayList();
+    private TableColumn<Item, String> columnName;
+    private TableColumn<Item, String> columnDate;
+    private TableColumn columnType;
+    private TableColumn<Item, String> columnSize;
+    private ObservableList<Item> videoList = FXCollections.observableArrayList();
+    private ObservableList<Item> audioList = FXCollections.observableArrayList();
+    private ObservableList<Item> bookList = FXCollections.observableArrayList();
+    private ObservableList<Item> documentList = FXCollections.observableArrayList();
     private ObservableList<Item> allList = FXCollections.observableArrayList();
-    String tableState = new String(Constants.VIDEO);
+    private String tableState = new String(Constants.VIDEO);
     private String username;
     private int id;
-    int left_size;
+    private int leftSize;
 
 
 
-    public MainWindow(Pane MainPane, String username, int id) throws SQLException {
+    public MainWindow(final Pane mainPane, final String username, final int id) throws SQLException {
 
-        super(MainPane, 610,400);
+        super(mainPane, 610, 400);
         this.username = new String(username);
         this.id = id;
-        usernameLabel = new Label("Welcome, " + username);
+        usernameLabel = new Label("Welcome, " + this.username);
         videoButton = new Button("Video");
         musicButton = new Button("Music");
         documentButton = new Button("Document");
@@ -75,10 +76,10 @@ public class MainWindow extends Scene {
         addButton = new Button("Add");
         remooveButton = new Button("Remove");
         table = new TableView<Item>();
-        column_name = new TableColumn<Item, String>("Name");
-        column_date = new TableColumn<Item, String>("Date");
-        column_size = new TableColumn<Item, String>("Size");
-        column_type = new TableColumn<Item, String>("Type");
+        columnName = new TableColumn<Item, String>("Name");
+        columnDate = new TableColumn<Item, String>("Date");
+        columnSize = new TableColumn<Item, String>("Size");
+        columnType = new TableColumn<Item, String>("Type");
         addButton.setDisable(false);
         remooveButton.setDisable(true);
 
@@ -93,21 +94,21 @@ public class MainWindow extends Scene {
                 break;
         }
 
-        column_name.setCellValueFactory(new PropertyValueFactory<>("name"));
-        column_type.setCellValueFactory(new PropertyValueFactory<>("extension"));
-        column_date.setCellValueFactory(new PropertyValueFactory<>("date"));
-        column_size.setCellValueFactory(new PropertyValueFactory<>("size"));
+        columnName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        columnType.setCellValueFactory(new PropertyValueFactory<>("extension"));
+        columnDate.setCellValueFactory(new PropertyValueFactory<>("date"));
+        columnSize.setCellValueFactory(new PropertyValueFactory<>("size"));
 
-        table.getColumns().addAll(column_name,column_type, column_date, column_size);
-        setVideo_list();
-        setAudio_list();
-        setBook_list();
-        setDocuments_list();
-        table.setItems(video_list);
-        table.setRowFactory(tv ->{
+        table.getColumns().addAll(columnName, columnType, columnDate, columnSize);
+        setvideoList();
+        setaudioList();
+        setbookList();
+        setdocumentList();
+        table.setItems(videoList);
+        table.setRowFactory(tv -> {
             TableRow<Item> row = new TableRow<Item>();
             row.setOnMouseClicked(event -> {
-                if(event.getClickCount() == 2 && (!row.isEmpty())){
+                if (event.getClickCount() == 2 && (!row.isEmpty())) {
                     try {
                         openFile(row.getItem());
                     } catch (IOException e) {
@@ -117,72 +118,72 @@ public class MainWindow extends Scene {
             });
             return row;
         });
-        column_size.setSortable(false);
-        column_date.setSortable(false);
+        columnSize.setSortable(false);
+        columnDate.setSortable(false);
 
-        MainPane.getChildren().addAll(usernameLabel, videoButton, musicButton, documentButton,
-                    bookButton, searchField, addButton, table, remooveButton);
+        mainPane.getChildren().addAll(usernameLabel, videoButton, musicButton, documentButton,
+                bookButton, searchField, addButton, table, remooveButton);
 
         table.setLayoutX(120);
         table.setLayoutY(40);
         table.setStyle("-fx-font-size: 15;" +
                 "-fx-pref-width: 490;" +
                 "-fx-pref-height: 360;");
-        column_name.setStyle("-fx-pref-width: 250;");
-        column_type.setStyle("-fx-pref-width: 50;");
-        column_size.setStyle("-fx-pref-width: 90;");
-        column_date.setStyle("-fx-pref-width: 100;");
+        columnName.setStyle("-fx-pref-width: 250;");
+        columnType.setStyle("-fx-pref-width: 50;");
+        columnSize.setStyle("-fx-pref-width: 90;");
+        columnDate.setStyle("-fx-pref-width: 100;");
 
         videoButton.setLayoutX(0);
         videoButton.setLayoutY(40);
         videoButton.setStyle("-fx-pref-width: 120;" +
-                    "-fx-pref-height: 60");
+                "-fx-pref-height: 60");
         videoButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                table.setItems(video_list);
+                table.setItems(videoList);
                 tableState = new String(Constants.VIDEO);
             }
         });
 
         musicButton.setStyle("-fx-pref-width: 120;" +
-                    "-fx-pref-height: 60");
+                "-fx-pref-height: 60");
         musicButton.setLayoutX(0);
         musicButton.setLayoutY(100);
         musicButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                table.setItems(audio_list);
+                table.setItems(audioList);
                 tableState = new String(Constants.AUDIO);
             }
         });
 
         documentButton.setStyle("-fx-pref-width: 120;" +
-                    "-fx-pref-height: 60");
+                "-fx-pref-height: 60");
         documentButton.setLayoutX(0);
         documentButton.setLayoutY(160);
         documentButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                table.setItems(documents_list);
+                table.setItems(documentList);
                 tableState = new String(Constants.DOCUMENTS);
             }
         });
 
         bookButton.setStyle("-fx-pref-width: 120;"
-                   + "-fx-pref-height: 60");
+                + "-fx-pref-height: 60");
         bookButton.setLayoutX(0);
         bookButton.setLayoutY(220);
         bookButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                table.setItems(book_list);
+                table.setItems(bookList);
                 tableState = new String(Constants.BOOK);
             }
         });
 
         addButton.setStyle("-fx-pref-width: 120;" +
-                    "-fx-pref-height: 60");
+                "-fx-pref-height: 60");
         addButton.setLayoutX(0);
         addButton.setLayoutY(280);
         addButton.setOnAction(new AddAction());
@@ -195,76 +196,77 @@ public class MainWindow extends Scene {
             @Override
             public void handle(ActionEvent event) {
                 Item item = table.getSelectionModel().getSelectedItem();
-                if(item != null){
+                if (item != null) {
                     removeItem(item);
                 }
             }
         });
 
         usernameLabel.setStyle("-fx-pref-height: 40;" +
-                    "-fx-pref-width: 305;" +
-                    "-fx-font-size: 25;" +
-                    "-fx-border-style: solid");
+                "-fx-pref-width: 305;" +
+                "-fx-font-size: 25;" +
+                "-fx-border-style: solid");
 
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-            FilteredList<Item> lst = new FilteredList<>(setListAtSearch(),p -> true);
+            FilteredList<Item> lst = new FilteredList<>(setListAtSearch(), p -> true);
             lst.setPredicate(item -> {
-                if(newValue == null || newValue.isEmpty()){
+                if (newValue == null || newValue.isEmpty()) {
                     return true;
                 }
                 String lowerCaseFilter = newValue.toLowerCase();
-                if(item.getName().toLowerCase().contains(lowerCaseFilter)){
+                if (item.getName().toLowerCase().contains(lowerCaseFilter)) {
                     return true;
-                }else { return false;}
+                } else {
+                    return false;
+                }
             });
             table.setItems(lst);
         });
 
         searchField.setStyle("-fx-pref-height: 40;" +
-                    "-fx-pref-width: 305;" +
-                    "-fx-font-size: 18");
+                "-fx-pref-width: 305;" +
+                "-fx-font-size: 18");
         searchField.setLayoutX(305);
         searchField.setLayoutY(0);
         searchField.setPromptText("What you want?");
 
 
-
     }
 
-    public void setVideo_list() throws SQLException {
+    public void setvideoList() throws SQLException {
         MyInformationDAO myInformationDAO = new MyInformationDAO();
         AddItem addItem = new AddItem(myInformationDAO.getInfo(Constants.VIDEO), Constants.VIDEO);
-        video_list.addAll(addItem.getVideo_list());
-        addItem.clearVideo_list();
+        videoList.addAll(addItem.getvideoList());
+        addItem.clearvideoList();
     }
 
-    public void setAudio_list()throws  SQLException{
+    public void setaudioList() throws SQLException {
         MyInformationDAO myInformationDAO = new MyInformationDAO();
         AddItem addItem = new AddItem(myInformationDAO.getInfo(Constants.AUDIO), Constants.AUDIO);
-        audio_list.addAll(addItem.getAudio_list());
-        addItem.clearAudio_list();
+        audioList.addAll(addItem.getaudioList());
+        addItem.clearaudioList();
     }
 
-    public void setBook_list() throws  SQLException{
+    public void setbookList() throws SQLException {
         MyInformationDAO myInformationDAO = new MyInformationDAO();
         AddItem addItem = new AddItem(myInformationDAO.getInfo(Constants.BOOK), Constants.BOOK);
-        book_list.addAll(addItem.getBook_list());
-        addItem.clearBook_list();
+        bookList.addAll(addItem.getbookList());
+        addItem.clearbookList();
     }
 
-    public void setDocuments_list() throws  SQLException{
+    public void setdocumentList() throws SQLException {
         MyInformationDAO myInformationDAO = new MyInformationDAO();
         AddItem addItem = new AddItem(myInformationDAO.getInfo(Constants.DOCUMENTS), Constants.DOCUMENTS);
-        documents_list.addAll(addItem.getDocuments_list());
-        addItem.clearDocuments_list();
+        documentList.addAll(addItem.getdocumentList());
+        addItem.cleardocumentList();
     }
 
     private void openFile(Item item) throws IOException {
 
 
-        if(new File(item.getPath()).exists()){
+        if (new File(item.getPath()).exists()) {
             Desktop.getDesktop().open(new File(item.getPath()));
-        }else{
+        } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Ooops...");
             alert.setHeaderText("This file does not exist.");
@@ -275,29 +277,29 @@ public class MainWindow extends Scene {
 
     }
 
-    private ObservableList<Item> setListAtSearch(){
+    private ObservableList<Item> setListAtSearch() {
         allList.clear();
-        allList.addAll(audio_list);
-        allList.addAll(book_list);
-        allList.addAll(documents_list);
-        allList.addAll(video_list);
+        allList.addAll(audioList);
+        allList.addAll(bookList);
+        allList.addAll(documentList);
+        allList.addAll(videoList);
 
         return allList;
     }
 
-    private void removeItem(Item item){
-        switch (tableState){
+    private void removeItem(Item item) {
+        switch (tableState) {
             case "AUDIO":
-                audio_list.remove(item);
+                audioList.remove(item);
                 break;
             case "BOOK":
-                book_list.remove(item);
+                bookList.remove(item);
                 break;
             case "DOCUMENTS":
-                documents_list.remove(item);
+                documentList.remove(item);
                 break;
             case "VIDEO":
-                video_list.remove(item);
+                videoList.remove(item);
                 break;
         }
         MyInformationDAO myInformationDAO = new MyInformationDAO();
@@ -314,17 +316,17 @@ public class MainWindow extends Scene {
         @Override
         public void handle(ActionEvent event) {
             try {
-                AddItem addItem = new AddItem(left_size, id);
+                AddItem addItem = new AddItem(leftSize, id);
                 addItem.setList(addItem.getFiles());
                 whatsize();
-                audio_list.addAll(addItem.getAudio_list());
-                addItem.clearAudio_list();
-                video_list.addAll(addItem.getVideo_list());
-                addItem.clearVideo_list();
-                book_list.addAll(addItem.getBook_list());
-                addItem.clearBook_list();
-                documents_list.addAll(addItem.getDocuments_list());
-                addItem.clearDocuments_list();
+                audioList.addAll(addItem.getaudioList());
+                addItem.clearaudioList();
+                videoList.addAll(addItem.getvideoList());
+                addItem.clearvideoList();
+                bookList.addAll(addItem.getbookList());
+                addItem.clearbookList();
+                documentList.addAll(addItem.getdocumentList());
+                addItem.cleardocumentList();
             } catch (SQLException e) {
                 e.printStackTrace();
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -340,13 +342,13 @@ public class MainWindow extends Scene {
         if (id != 0 && id != 2) {
             MyUsersDAO myUsersDAO = new MyUsersDAO();
             try {
-                left_size = myUsersDAO.check_info_size(id);
-                if(left_size <= 1){
+                leftSize = myUsersDAO.checkInfoSize(id);
+                if (leftSize <= 1) {
                     addButton.setText("Add\n(0 KB)");
                     addButton.setDisable(true);
-                }else{
-                    String string  = new String(Double.toString(((double)left_size/Constants.KB)));
-                    addButton.setText("Add\n(" + string.substring(0, string.indexOf(".")+2) + " KB)");
+                } else {
+                    String string = new String(Double.toString(((double) leftSize / Constants.KB)));
+                    addButton.setText("Add\n(" + string.substring(0, string.indexOf(".") + 2) + " KB)");
                     addButton.setAlignment(Pos.CENTER);
                 }
             } catch (SQLException e) {

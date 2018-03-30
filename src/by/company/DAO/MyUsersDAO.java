@@ -121,7 +121,7 @@ public class MyUsersDAO implements UsersDAO {
         return 0;
     }
     @Override
-    public int check_info_size(int id) throws SQLException {
+    public int checkInfoSize(int id) throws SQLException {
         int size = Constants.MB_10;
         Connection connection = new MyDAOFactory().getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(SQLConstants.CHECK_SIZE_ITEMS);

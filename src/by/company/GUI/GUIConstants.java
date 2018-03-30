@@ -1,9 +1,14 @@
 package by.company.GUI;
 
+/**
+ * This class contains some constants for GUI.
+ */
+
 public class GUIConstants {
-    public static final String USERNAME_LABEL_TEXT = new String("Username: ");
-    public static final String PASSWORD_LABEL_TEXT = new String("Password: ");
-    public static final String HOMECATALOG_LABEL = new String("Home Catalog");
+
+    public static final String USERNAMELABELTEXT = new String("Username: ");
+    public static final String passwordLabel_TEXT = new String("Password: ");
+    public static final String homeCatalog_LABEL = new String("Home Catalog");
     public static final String LOGINBTN_TEXT = new String("Log In");
     public static final String SIGNUPBTN_TEXT = new String("Sign Up");
     public static final String GUESTBTN_TEXT = new String("Log In as Guest");

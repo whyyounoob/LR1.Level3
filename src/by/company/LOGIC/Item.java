@@ -2,11 +2,14 @@ package by.company.LOGIC;
 
 import by.company.DAO.MyInformationDAO;
 import javafx.beans.property.SimpleStringProperty;
-
 import java.io.File;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+
+/**
+ *
+ */
 
 public class Item {
     private SimpleStringProperty name = new SimpleStringProperty("");
